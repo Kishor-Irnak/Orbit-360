@@ -1,11 +1,15 @@
 import type { NextConfig } from "next";
 
+const isProd = process.env.NODE_ENV === "production";
+
 const nextConfig: NextConfig = {
   output: "export",
-  basePath: "/Orbit-360",
+  basePath: isProd ? "/Orbit-360" : "",
+  assetPrefix: isProd ? "/Orbit-360/" : "",
   images: {
     unoptimized: true,
   },
+  trailingSlash: true,
 };
 
 export default nextConfig;
