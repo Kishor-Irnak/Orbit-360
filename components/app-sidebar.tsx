@@ -157,8 +157,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   // Determine which logo to use based on theme
   // Use dark logo as default during SSR to avoid hydration mismatch
   const currentTheme = mounted ? resolvedTheme || theme : "dark";
+  const basePath = process.env.NODE_ENV === "production" ? "/Orbit-360" : "";
   const logoSrc =
-    currentTheme === "dark" ? "/orbit360-logo.png" : "/orbit360-logoBlack.png";
+    currentTheme === "dark"
+      ? `${basePath}/orbit360-logo.png`
+      : `${basePath}/orbit360-logoBlack.png`;
 
   return (
     <Sidebar variant="inset" {...props}>
