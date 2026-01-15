@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import { useTheme } from "next-themes";
 import {
   BarChart3,
@@ -168,7 +167,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <div className="flex items-center gap-2 px-2 py-2">
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg overflow-hidden">
-                <Image
+                <img
                   src={logoSrc}
                   alt="Orbit 360 Logo"
                   width={32}
