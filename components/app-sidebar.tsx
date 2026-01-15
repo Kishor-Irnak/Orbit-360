@@ -1,6 +1,8 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
+import { useTheme } from "next-themes";
 import {
   BarChart3,
   Bot,
@@ -44,7 +46,7 @@ const data = {
     {
       name: "Orbit 360",
       logo: Command,
-      plan: "Enterprise",
+      plan: "Powered by Evoc Labs.",
     },
   ],
   navMain: [
@@ -136,9 +138,15 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [activeTeam, setActiveTeam] = React.useState(data.teams[0]);
+  const { theme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
   const [openItems, setOpenItems] = React.useState<Record<string, boolean>>({
     Dashboard: true,
   });
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const toggleItem = (title: string) => {
     setOpenItems((prev) => ({
@@ -147,14 +155,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     }));
   };
 
+  // Determine which logo to use based on theme
+  // Use dark logo as default during SSR to avoid hydration mismatch
+  const currentTheme = mounted ? resolvedTheme || theme : "dark";
+  const logoSrc =
+    currentTheme === "dark" ? "/orbit360-logo.png" : "/orbit360-logoBlack.png";
+
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <div className="flex items-center gap-2 px-2 py-2">
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                <activeTeam.logo className="size-4" />
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg overflow-hidden">
+                <Image
+                  src={logoSrc}
+                  alt="Orbit 360 Logo"
+                  width={32}
+                  height={32}
+                  className="object-contain"
+                />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">

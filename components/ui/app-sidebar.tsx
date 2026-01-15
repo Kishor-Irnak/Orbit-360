@@ -48,7 +48,7 @@ const data = {
     {
       name: "Orbit 360",
       logo: Command,
-      plan: "Enterprise",
+      plan: "Powered by Evoc Labs.",
     },
   ],
   navMain: [
