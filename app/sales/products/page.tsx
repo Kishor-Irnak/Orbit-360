@@ -1,11 +1,14 @@
+import { ProductsTable } from "@/components/products-table";
+import { ProductCards } from "@/components/product-cards";
+import data from "./data.json";
+
 export default function ProductsPage() {
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-      <div className="rounded-xl border bg-card text-card-foreground shadow">
-        <div className="p-6 pt-0">
-          <div className="min-h-[100vh] flex-1 rounded-xl md:min-h-min flex items-center justify-center p-8 text-muted-foreground">
-            Products content goes here
-          </div>
+      <div className="@container/main flex flex-1 flex-col gap-2">
+        <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+          <ProductCards />
+          <ProductsTable data={data} />
         </div>
       </div>
     </div>
