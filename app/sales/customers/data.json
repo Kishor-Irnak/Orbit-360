@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "id": "CUST-001",
     "customer": "Alice Johnson",
@@ -6,7 +6,10 @@
     "orders": 15,
     "spent": "₹1,250.00",
     "lastOrder": "2023-10-25",
-    "tags": ["VIP", "Frequent"]
+    "tags": [
+      "VIP",
+      "Frequent"
+    ]
   },
   {
     "id": "CUST-002",
@@ -15,7 +18,9 @@
     "orders": 3,
     "spent": "₹250.00",
     "lastOrder": "2023-10-20",
-    "tags": ["New"]
+    "tags": [
+      "New"
+    ]
   },
   {
     "id": "CUST-003",
@@ -24,7 +29,10 @@
     "orders": 8,
     "spent": "₹800.00",
     "lastOrder": "2023-10-22",
-    "tags": ["Corporate", "Returning"]
+    "tags": [
+      "Corporate",
+      "Returning"
+    ]
   },
   {
     "id": "CUST-004",
@@ -33,7 +41,10 @@
     "orders": 25,
     "spent": "₹3,500.00",
     "lastOrder": "2023-10-26",
-    "tags": ["VIP", "High Spender"]
+    "tags": [
+      "VIP",
+      "High Spender"
+    ]
   },
   {
     "id": "CUST-005",
@@ -42,7 +53,9 @@
     "orders": 1,
     "spent": "₹50.00",
     "lastOrder": "2023-09-15",
-    "tags": ["Inactive"]
+    "tags": [
+      "Inactive"
+    ]
   },
   {
     "id": "CUST-006",
@@ -51,7 +64,9 @@
     "orders": 6,
     "spent": "₹450.00",
     "lastOrder": "2023-10-10",
-    "tags": ["Returning"]
+    "tags": [
+      "Returning"
+    ]
   },
   {
     "id": "CUST-007",
@@ -60,7 +75,9 @@
     "orders": 12,
     "spent": "₹1,100.00",
     "lastOrder": "2023-10-24",
-    "tags": ["VIP"]
+    "tags": [
+      "VIP"
+    ]
   },
   {
     "id": "CUST-008",
@@ -69,7 +86,9 @@
     "orders": 4,
     "spent": "₹320.00",
     "lastOrder": "2023-10-18",
-    "tags": ["New"]
+    "tags": [
+      "New"
+    ]
   },
   {
     "id": "CUST-009",
@@ -78,7 +97,9 @@
     "orders": 9,
     "spent": "₹950.00",
     "lastOrder": "2023-10-21",
-    "tags": ["Returning"]
+    "tags": [
+      "Returning"
+    ]
   },
   {
     "id": "CUST-010",
@@ -87,6 +108,8 @@
     "orders": 2,
     "spent": "₹150.00",
     "lastOrder": "2023-09-30",
-    "tags": ["New"]
+    "tags": [
+      "New"
+    ]
   }
 ]
