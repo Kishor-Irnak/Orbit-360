@@ -1,0 +1,82 @@
+[
+  {
+    "id": "ORD-001",
+    "customer": "Alice Smith",
+    "date": "2023-10-25",
+    "status": "Paid",
+    "total": "$120.50",
+    "paymentMethod": "Credit Card"
+  },
+  {
+    "id": "ORD-002",
+    "customer": "Bob Jones",
+    "date": "2023-10-26",
+    "status": "Pending",
+    "total": "$85.00",
+    "paymentMethod": "PayPal"
+  },
+  {
+    "id": "ORD-003",
+    "customer": "Charlie Brown",
+    "date": "2023-10-27",
+    "status": "Shipped",
+    "total": "$340.00",
+    "paymentMethod": "Credit Card"
+  },
+  {
+    "id": "ORD-004",
+    "customer": "Diana Prince",
+    "date": "2023-10-27",
+    "status": "Delivered",
+    "total": "$50.00",
+    "paymentMethod": "Debit Card"
+  },
+  {
+    "id": "ORD-005",
+    "customer": "Evan Wright",
+    "date": "2023-10-28",
+    "status": "Run",
+    "total": "$210.25",
+    "paymentMethod": "Credit Card"
+  },
+  {
+    "id": "ORD-006",
+    "customer": "Fiona Gallagher",
+    "date": "2023-10-29",
+    "status": "Refunded",
+    "total": "$15.00",
+    "paymentMethod": "PayPal"
+  },
+  {
+    "id": "ORD-007",
+    "customer": "George Costanza",
+    "date": "2023-10-30",
+    "status": "Paid",
+    "total": "$99.99",
+    "paymentMethod": "Credit Card"
+  },
+  {
+    "id": "ORD-008",
+    "customer": "Hannah Montana",
+    "date": "2023-10-31",
+    "status": "Cancelled",
+    "total": "$0.00",
+    "paymentMethod": "N/A"
+  },
+  {
+    "id": "ORD-009",
+    "customer": "Ian Malcolm",
+    "date": "2023-11-01",
+    "status": "Paid",
+    "total": "$1200.00",
+    "paymentMethod": "Bank Transfer"
+  },
+  {
+    "id": "ORD-010",
+    "customer": "Jack Sparrow",
+    "date": "2023-11-02",
+    "status": "Shipped",
+    "total": "$45.50",
+    "paymentMethod": "Credit Card"
+  }
+]

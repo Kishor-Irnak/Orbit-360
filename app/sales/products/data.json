@@ -1,0 +1,110 @@
+[
+  {
+    "id": "PROD-001",
+    "name": "Wireless Noise-Canceling Headphones",
+    "category": "Electronics",
+    "price": "$299.99",
+    "stock": 45,
+    "status": "In Stock",
+    "image": "https://placehold.co/100x100/2a2a2a/white?text=Headphones"
+  },
+  {
+    "id": "PROD-002",
+    "name": "Ergonomic Office Chair",
+    "category": "Furniture",
+    "price": "$199.50",
+    "stock": 12,
+    "status": "Low Stock",
+    "image": "https://placehold.co/100x100/2a2a2a/white?text=Chair"
+  },
+  {
+    "id": "PROD-003",
+    "name": "Smart Fitness Tracker",
+    "category": "Wearables",
+    "price": "$89.99",
+    "stock": 120,
+    "status": "In Stock",
+    "image": "https://placehold.co/100x100/2a2a2a/white?text=Tracker"
+  },
+  {
+    "id": "PROD-004",
+    "name": "Mechanical Gaming Keyboard",
+    "category": "Electronics",
+    "price": "$129.00",
+    "stock": 8,
+    "status": "Low Stock",
+    "image": "https://placehold.co/100x100/2a2a2a/white?text=Keyboard"
+  },
+  {
+    "id": "PROD-005",
+    "name": "Organic Cotton T-Shirt",
+    "category": "Apparel",
+    "price": "$25.00",
+    "stock": 0,
+    "status": "Out of Stock",
+    "image": "https://placehold.co/100x100/2a2a2a/white?text=T-Shirt"
+  },
+  {
+    "id": "PROD-006",
+    "name": "4K Ultra HD Monitor",
+    "category": "Electronics",
+    "price": "$450.00",
+    "stock": 30,
+    "status": "In Stock",
+    "image": "https://placehold.co/100x100/2a2a2a/white?text=Monitor"
+  },
+  {
+    "id": "PROD-007",
+    "name": "Stainless Steel Water Bottle",
+    "category": "Accessories",
+    "price": "$18.50",
+    "stock": 200,
+    "status": "In Stock",
+    "image": "https://placehold.co/100x100/2a2a2a/white?text=Bottle"
+  },
+  {
+    "id": "PROD-008",
+    "name": "Bluetooth Portable Speaker",
+    "category": "Electronics",
+    "price": "$55.00",
+    "stock": 0,
+    "status": "Out of Stock",
+    "image": "https://placehold.co/100x100/2a2a2a/white?text=Speaker"
+  },
+  {
+    "id": "PROD-009",
+    "name": "Leather Messenger Bag",
+    "category": "Accessories",
+    "price": "$145.00",
+    "stock": 15,
+    "status": "In Stock",
+    "image": "https://placehold.co/100x100/2a2a2a/white?text=Bag"
+  },
+  {
+    "id": "PROD-010",
+    "name": "LED Desk Lamp",
+    "category": "Furniture",
+    "price": "$35.99",
+    "stock": 58,
+    "status": "In Stock",
+    "image": "https://placehold.co/100x100/2a2a2a/white?text=Lamp"
+  },
+  {
+    "id": "PROD-011",
+    "name": "Ceramic Coffee Mug Set",
+    "category": "Kitchen",
+    "price": "$42.00",
+    "stock": 25,
+    "status": "In Stock",
+    "image": "https://placehold.co/100x100/2a2a2a/white?text=Mugs"
+  },
+  {
+    "id": "PROD-012",
+    "name": "Yoga Mat",
+    "category": "Fitness",
+    "price": "$22.00",
+    "stock": 6,
+    "status": "Low Stock",
+    "image": "https://placehold.co/100x100/2a2a2a/white?text=Mat"
+  }
+]
