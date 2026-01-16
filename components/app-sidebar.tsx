@@ -81,16 +81,16 @@ const data = {
       icon: Megaphone,
       items: [
         {
+          title: "Performance",
+          url: "/marketing/performance",
+        },
+        {
           title: "Campaigns",
           url: "/marketing/campaigns",
         },
         {
           title: "Creatives",
           url: "/marketing/creatives",
-        },
-        {
-          title: "Performance",
-          url: "/marketing/performance",
         },
       ],
     },

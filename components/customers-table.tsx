@@ -242,9 +242,7 @@ function RowActions({ row }: { row: Row<z.infer<typeof customerSchema>> }) {
         <DropdownMenuItem>View Details</DropdownMenuItem>
         <DropdownMenuItem>Edit Properties</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem variant="destructive">
-          Delete Customer
-        </DropdownMenuItem>
+        <DropdownMenuItem variant="destructive">delete</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
