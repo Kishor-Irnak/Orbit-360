@@ -1,10 +1,10 @@
-[
+﻿[
   {
     "id": "ORD-001",
     "customer": "Alice Smith",
     "date": "2023-10-25",
     "status": "Paid",
-    "total": "$120.50",
+    "total": "₹120.50",
     "paymentMethod": "Credit Card"
   },
   {
@@ -12,7 +12,7 @@
     "customer": "Bob Jones",
     "date": "2023-10-26",
     "status": "Pending",
-    "total": "$85.00",
+    "total": "₹85.00",
     "paymentMethod": "PayPal"
   },
   {
@@ -20,7 +20,7 @@
     "customer": "Charlie Brown",
     "date": "2023-10-27",
     "status": "Shipped",
-    "total": "$340.00",
+    "total": "₹340.00",
     "paymentMethod": "Credit Card"
   },
   {
@@ -28,7 +28,7 @@
     "customer": "Diana Prince",
     "date": "2023-10-27",
     "status": "Delivered",
-    "total": "$50.00",
+    "total": "₹50.00",
     "paymentMethod": "Debit Card"
   },
   {
@@ -36,7 +36,7 @@
     "customer": "Evan Wright",
     "date": "2023-10-28",
     "status": "Run",
-    "total": "$210.25",
+    "total": "₹210.25",
     "paymentMethod": "Credit Card"
   },
   {
@@ -44,7 +44,7 @@
     "customer": "Fiona Gallagher",
     "date": "2023-10-29",
     "status": "Refunded",
-    "total": "$15.00",
+    "total": "₹15.00",
     "paymentMethod": "PayPal"
   },
   {
@@ -52,7 +52,7 @@
     "customer": "George Costanza",
     "date": "2023-10-30",
     "status": "Paid",
-    "total": "$99.99",
+    "total": "₹99.99",
     "paymentMethod": "Credit Card"
   },
   {
@@ -60,7 +60,7 @@
     "customer": "Hannah Montana",
     "date": "2023-10-31",
     "status": "Cancelled",
-    "total": "$0.00",
+    "total": "₹0.00",
     "paymentMethod": "N/A"
   },
   {
@@ -68,7 +68,7 @@
     "customer": "Ian Malcolm",
     "date": "2023-11-01",
     "status": "Paid",
-    "total": "$1200.00",
+    "total": "₹1200.00",
     "paymentMethod": "Bank Transfer"
   },
   {
@@ -76,7 +76,7 @@
     "customer": "Jack Sparrow",
     "date": "2023-11-02",
     "status": "Shipped",
-    "total": "$45.50",
+    "total": "₹45.50",
     "paymentMethod": "Credit Card"
   }
 ]

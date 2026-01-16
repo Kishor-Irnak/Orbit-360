@@ -1,10 +1,10 @@
-[
+﻿[
   {
     "id": "CUST-001",
     "customer": "Alice Johnson",
     "email": "alice@example.com",
     "orders": 15,
-    "spent": "$1,250.00",
+    "spent": "₹1,250.00",
     "lastOrder": "2023-10-25",
     "tags": ["VIP", "Frequent"]
   },
@@ -13,7 +13,7 @@
     "customer": "Bob Smith",
     "email": "bob@example.com",
     "orders": 3,
-    "spent": "$250.00",
+    "spent": "₹250.00",
     "lastOrder": "2023-10-20",
     "tags": ["New"]
   },
@@ -22,7 +22,7 @@
     "customer": "Charlie Brown",
     "email": "charlie@example.com",
     "orders": 8,
-    "spent": "$800.00",
+    "spent": "₹800.00",
     "lastOrder": "2023-10-22",
     "tags": ["Corporate", "Returning"]
   },
@@ -31,7 +31,7 @@
     "customer": "Diana Prince",
     "email": "diana@example.com",
     "orders": 25,
-    "spent": "$3,500.00",
+    "spent": "₹3,500.00",
     "lastOrder": "2023-10-26",
     "tags": ["VIP", "High Spender"]
   },
@@ -40,7 +40,7 @@
     "customer": "Evan Wright",
     "email": "evan@example.com",
     "orders": 1,
-    "spent": "$50.00",
+    "spent": "₹50.00",
     "lastOrder": "2023-09-15",
     "tags": ["Inactive"]
   },
@@ -49,7 +49,7 @@
     "customer": "Fiona Gallagher",
     "email": "fiona@example.com",
     "orders": 6,
-    "spent": "$450.00",
+    "spent": "₹450.00",
     "lastOrder": "2023-10-10",
     "tags": ["Returning"]
   },
@@ -58,7 +58,7 @@
     "customer": "George Martin",
     "email": "george@example.com",
     "orders": 12,
-    "spent": "$1,100.00",
+    "spent": "₹1,100.00",
     "lastOrder": "2023-10-24",
     "tags": ["VIP"]
   },
@@ -67,7 +67,7 @@
     "customer": "Hannah Abbott",
     "email": "hannah@example.com",
     "orders": 4,
-    "spent": "$320.00",
+    "spent": "₹320.00",
     "lastOrder": "2023-10-18",
     "tags": ["New"]
   },
@@ -76,7 +76,7 @@
     "customer": "Ian Somerhalder",
     "email": "ian@example.com",
     "orders": 9,
-    "spent": "$950.00",
+    "spent": "₹950.00",
     "lastOrder": "2023-10-21",
     "tags": ["Returning"]
   },
@@ -85,7 +85,7 @@
     "customer": "Jane Doe",
     "email": "jane@example.com",
     "orders": 2,
-    "spent": "$150.00",
+    "spent": "₹150.00",
     "lastOrder": "2023-09-30",
     "tags": ["New"]
   }
