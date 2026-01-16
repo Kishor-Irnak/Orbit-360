@@ -66,7 +66,7 @@ export function Calendar28() {
             id="date"
             variant={"outline"}
             className={cn(
-              "w-full justify-start text-left font-normal",
+              "w-[240px] justify-start text-left font-normal",
               !date && "text-muted-foreground"
             )}
           >
