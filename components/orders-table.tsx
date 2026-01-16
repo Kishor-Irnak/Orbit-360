@@ -584,7 +584,9 @@ function TableCellViewer({ item }: { item: z.infer<typeof orderSchema> }) {
             </div>
             <div className="flex justify-between items-center border-b pb-2">
               <span>Product B</span>
-              <span>{item.total.replace("$", "").split(".")[0] - 50}.00</span>
+              <span>
+                {Number(item.total.replace("$", "").split(".")[0]) - 50}.00
+              </span>
             </div>
           </div>
           <Separator />
