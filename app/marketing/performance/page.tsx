@@ -1,4 +1,4 @@
-"use client";
+import { RoasTrendChart } from "@/components/roas-trend-chart";
 import * as React from "react";
 
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
@@ -7,7 +7,9 @@ import { PerformanceCards } from "@/components/performance-cards";
 import { ChartAreaInteractive } from "@/components/chart-area-interactive";
 import { DateRangeSelector } from "@/components/date-range-selector";
 
+import { CampaignsTable } from "@/components/campaigns-table";
 import data from "./data.json";
+import campaignData from "../campaigns/data.json";
 
 import {
   Card,
@@ -35,42 +37,10 @@ export default function Page() {
         <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
           <PerformanceCards />
           <div className="grid grid-cols-1 gap-4 px-4 lg:grid-cols-2 lg:gap-6 lg:px-6">
-            <Card className="@container/card">
-              <CardHeader>
-                <CardTitle>Weekly Performance</CardTitle>
-                <CardDescription>Desktop vs Mobile traffic</CardDescription>
-              </CardHeader>
-              <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-                <ChartContainer
-                  config={chartConfig}
-                  className="aspect-auto h-[250px] w-full"
-                >
-                  <BarChart accessibilityLayer data={data.barChartData}>
-                    <CartesianGrid vertical={false} />
-                    <XAxis
-                      dataKey="day"
-                      tickLine={false}
-                      tickMargin={10}
-                      axisLine={false}
-                    />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <Bar
-                      dataKey="desktop"
-                      fill="var(--color-desktop)"
-                      radius={4}
-                    />
-                    <Bar
-                      dataKey="mobile"
-                      fill="var(--color-mobile)"
-                      radius={4}
-                    />
-                  </BarChart>
-                </ChartContainer>
-              </CardContent>
-            </Card>
+            <RoasTrendChart />
             <ChartAreaInteractive data={data.areaChartData} />
           </div>
-          <DataTable data={data.tableData} />
+          <CampaignsTable data={campaignData} />
         </div>
       </div>
     </div>
