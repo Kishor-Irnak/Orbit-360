@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,17708,t=>{"use strict";let l=(0,t.i(33550).default)("outline","plus","Plus",[["path",{d:"M12 5l0 14",key:"svg-0"}],["path",{d:"M5 12l14 0",key:"svg-1"}]]);t.s(["IconPlus",()=>l],17708)}]);
