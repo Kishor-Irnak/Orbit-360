@@ -351,16 +351,51 @@ export function ProductsTable({
     }
   }
 
+  const [activeTab, setActiveTab] = React.useState("all");
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    if (value === "all") {
+      setData(initialData);
+    } else if (value === "active") {
+      setData(
+        initialData.filter(
+          (item) => item.status === "In Stock" || item.status === "Low Stock"
+        )
+      );
+    } else if (value === "draft") {
+      setData(
+        initialData.filter(
+          (item) => item.status === "Out of Stock" || item.status === "Draft"
+        )
+      );
+    } else if (value === "archived") {
+      setData(initialData.filter((item) => item.status === "Archived"));
+    }
+    table.setPageIndex(0);
+  };
+
+  const activeCount = initialData.filter(
+    (item) => item.status === "In Stock" || item.status === "Low Stock"
+  ).length;
+  const draftCount = initialData.filter(
+    (item) => item.status === "Out of Stock" || item.status === "Draft"
+  ).length;
+
   return (
-    <Tabs defaultValue="all" className="w-full flex-col justify-start gap-6">
+    <Tabs
+      defaultValue="all"
+      className="w-full flex-col justify-start gap-6"
+      onValueChange={handleTabChange}
+    >
       <div className="flex items-center justify-between px-4 lg:px-6">
         <TabsList className="**:data-[slot=badge]:bg-muted-foreground/30 hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:px-1 @4xl/main:flex">
           <TabsTrigger value="all">All Products</TabsTrigger>
           <TabsTrigger value="active">
-            Active <Badge variant="secondary">12</Badge>
+            Active <Badge variant="secondary">{activeCount}</Badge>
           </TabsTrigger>
           <TabsTrigger value="draft">
-            Draft <Badge variant="secondary">3</Badge>
+            Draft <Badge variant="secondary">{draftCount}</Badge>
           </TabsTrigger>
           <TabsTrigger value="archived">Archived</TabsTrigger>
         </TabsList>
@@ -398,16 +433,9 @@ export function ProductsTable({
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button variant="outline" size="sm">
-            <IconPlus />
-            <span className="hidden lg:inline">New Product</span>
-          </Button>
         </div>
       </div>
-      <TabsContent
-        value="all"
-        className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
-      >
+      <div className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">
         <div className="overflow-hidden rounded-lg border">
           <DndContext
             collisionDetection={closestCenter}
@@ -536,22 +564,7 @@ export function ProductsTable({
             </div>
           </div>
         </div>
-      </TabsContent>
-      <TabsContent value="active" className="flex flex-col px-4 lg:px-6">
-        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed flex items-center justify-center text-muted-foreground">
-          Active Products View
-        </div>
-      </TabsContent>
-      <TabsContent value="draft" className="flex flex-col px-4 lg:px-6">
-        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed flex items-center justify-center text-muted-foreground">
-          Draft Products View
-        </div>
-      </TabsContent>
-      <TabsContent value="archived" className="flex flex-col px-4 lg:px-6">
-        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed flex items-center justify-center text-muted-foreground">
-          Archived Products View
-        </div>
-      </TabsContent>
+      </div>
     </Tabs>
   );
 }

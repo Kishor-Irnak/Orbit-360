@@ -385,8 +385,28 @@ export function CustomersTable({
     document.body.removeChild(link);
   };
 
+  const [activeTab, setActiveTab] = React.useState("all");
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    if (value === "all") {
+      setData(initialData);
+    } else if (value === "vip") {
+      setData(initialData.filter((item) => item.tags.includes("VIP")));
+    } else if (value === "returning") {
+      setData(initialData.filter((item) => item.tags.includes("Returning")));
+    } else if (value === "new") {
+      setData(initialData.filter((item) => item.tags.includes("New")));
+    }
+    table.setPageIndex(0);
+  };
+
   return (
-    <Tabs defaultValue="all" className="w-full flex-col justify-start gap-6">
+    <Tabs
+      defaultValue="all"
+      className="w-full flex-col justify-start gap-6"
+      onValueChange={handleTabChange}
+    >
       <div className="flex flex-col gap-4 py-4 px-4 lg:px-6">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="relative w-full md:w-72">
@@ -451,10 +471,6 @@ export function CustomersTable({
                   })}
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button size="sm">
-              <IconPlus className="mr-2 size-4" />
-              Add Customer
-            </Button>
           </div>
         </div>
 
@@ -466,10 +482,7 @@ export function CustomersTable({
         </TabsList>
       </div>
 
-      <TabsContent
-        value="all"
-        className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
-      >
+      <div className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">
         <CustomerTableContent
           table={table}
           dataIds={dataIds}
@@ -478,36 +491,7 @@ export function CustomersTable({
           sensors={sensors}
           sortableId={sortableId}
         />
-      </TabsContent>
-      <TabsContent
-        value="vip"
-        className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
-      >
-        {/* Here typically you'd filter data for VIP and pass it, but for now I'll just show the same table but filtered if I were implementing full logic. 
-             Since the user didn't strictly ask for tabs logic implementation but "table like orders page", I'll just reuse the content component which uses the main table instance which currently shows ALL. 
-             To strictly implement tabs filtering, I'd need to update the `columnFilters` state when tab changes.
-         */}
-        <div className="text-muted text-sm p-4">
-          Select 'All Customers' to view data (Tabs filtering not fully wired
-          for simplicity)
-        </div>
-      </TabsContent>
-      <TabsContent
-        value="returning"
-        className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
-      >
-        <div className="text-muted text-sm p-4">
-          Select 'All Customers' to view data
-        </div>
-      </TabsContent>
-      <TabsContent
-        value="new"
-        className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
-      >
-        <div className="text-muted text-sm p-4">
-          Select 'All Customers' to view data
-        </div>
-      </TabsContent>
+      </div>
     </Tabs>
   );
 }

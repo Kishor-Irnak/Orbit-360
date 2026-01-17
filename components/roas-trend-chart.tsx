@@ -74,7 +74,14 @@ export function RoasTrendChart() {
     <Card className="@container/card">
       <CardHeader>
         <CardTitle>ROAS Trend</CardTitle>
-        <CardDescription>Daily Return on Ad Spend</CardDescription>
+        <CardDescription>
+          Daily ROAS for the last{" "}
+          {timeRange === "90d"
+            ? "3 months"
+            : timeRange === "30d"
+            ? "30 days"
+            : "7 days"}
+        </CardDescription>
         <CardAction>
           <ToggleGroup
             type="single"
@@ -89,7 +96,7 @@ export function RoasTrendChart() {
           </ToggleGroup>
           <Select value={timeRange} onValueChange={setTimeRange}>
             <SelectTrigger
-              className="flex w-32 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[767px]/card:hidden"
+              className="flex w-40 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[767px]/card:hidden"
               size="sm"
               aria-label="Select a value"
             >
@@ -109,7 +116,7 @@ export function RoasTrendChart() {
           </Select>
         </CardAction>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         <ChartContainer
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
@@ -161,22 +168,6 @@ export function RoasTrendChart() {
           </AreaChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter>
-        <div className="flex w-full items-start gap-2 text-sm">
-          <div className="grid gap-2">
-            <div className="flex items-center gap-2 leading-none font-medium">
-              Trending up by 12% this week <TrendingUp className="h-4 w-4" />
-            </div>
-            <div className="text-muted-foreground flex items-center gap-2 leading-none">
-              {timeRange === "7d"
-                ? "Last 7 Days"
-                : timeRange === "30d"
-                ? "Last 30 Days"
-                : "Last 3 Months"}
-            </div>
-          </div>
-        </div>
-      </CardFooter>
     </Card>
   );
 }

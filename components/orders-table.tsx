@@ -344,16 +344,55 @@ export function OrdersTable({
     }
   }
 
+  const [activeTab, setActiveTab] = React.useState("all");
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    if (value === "all") {
+      setData(initialData);
+    } else if (value === "pending") {
+      setData(
+        initialData.filter(
+          (item) => item.status === "Pending" || item.status === "Run"
+        )
+      );
+    } else if (value === "shipped") {
+      setData(
+        initialData.filter(
+          (item) => item.status === "Shipped" || item.status === "Delivered"
+        )
+      );
+    } else if (value === "returns") {
+      setData(
+        initialData.filter(
+          (item) => item.status === "Refunded" || item.status === "Cancelled"
+        )
+      );
+    }
+    table.setPageIndex(0);
+  };
+
+  const pendingCount = initialData.filter(
+    (item) => item.status === "Pending" || item.status === "Run"
+  ).length;
+  const shippedCount = initialData.filter(
+    (item) => item.status === "Shipped" || item.status === "Delivered"
+  ).length;
+
   return (
-    <Tabs defaultValue="all" className="w-full flex-col justify-start gap-6">
+    <Tabs
+      defaultValue="all"
+      className="w-full flex-col justify-start gap-6"
+      onValueChange={handleTabChange}
+    >
       <div className="flex items-center justify-between px-4 lg:px-6">
         <TabsList className="**:data-[slot=badge]:bg-muted-foreground/30 hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:px-1 @4xl/main:flex">
           <TabsTrigger value="all">All Orders</TabsTrigger>
           <TabsTrigger value="pending">
-            Pending <Badge variant="secondary">4</Badge>
+            Pending <Badge variant="secondary">{pendingCount}</Badge>
           </TabsTrigger>
           <TabsTrigger value="shipped">
-            Shipped <Badge variant="secondary">12</Badge>
+            Shipped <Badge variant="secondary">{shippedCount}</Badge>
           </TabsTrigger>
           <TabsTrigger value="returns">Returns</TabsTrigger>
         </TabsList>
@@ -397,10 +436,7 @@ export function OrdersTable({
           </Button>
         </div>
       </div>
-      <TabsContent
-        value="all"
-        className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
-      >
+      <div className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">
         <div className="overflow-hidden rounded-lg border">
           <DndContext
             collisionDetection={closestCenter}
@@ -529,22 +565,7 @@ export function OrdersTable({
             </div>
           </div>
         </div>
-      </TabsContent>
-      <TabsContent value="pending" className="flex flex-col px-4 lg:px-6">
-        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed flex items-center justify-center text-muted-foreground">
-          Pending Orders View
-        </div>
-      </TabsContent>
-      <TabsContent value="shipped" className="flex flex-col px-4 lg:px-6">
-        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed flex items-center justify-center text-muted-foreground">
-          Shipped Orders View
-        </div>
-      </TabsContent>
-      <TabsContent value="returns" className="flex flex-col px-4 lg:px-6">
-        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed flex items-center justify-center text-muted-foreground">
-          Returns View
-        </div>
-      </TabsContent>
+      </div>
     </Tabs>
   );
 }
