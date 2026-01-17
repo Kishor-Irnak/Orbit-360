@@ -73,6 +73,14 @@ export function DateRangeSelector({
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
   const handleRangeChange = (value: string) => {
+    // Close custom popovers when selecting non-custom options
+    if (value !== "custom-date") {
+      setOpenCustomDate(false);
+    }
+    if (value !== "custom-range") {
+      setOpenCustomRange(false);
+    }
+
     // Don't close dropdown for custom options
     if (value !== "custom-date" && value !== "custom-range") {
       setDropdownOpen(false);
@@ -102,7 +110,17 @@ export function DateRangeSelector({
   };
 
   return (
-    <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
+    <DropdownMenu
+      open={dropdownOpen}
+      onOpenChange={(open) => {
+        // If a custom calendar popover is open, prevent the dropdown from closing
+        if (!open && (openCustomDate || openCustomRange)) {
+          setDropdownOpen(true);
+          return;
+        }
+        setDropdownOpen(open);
+      }}
+    >
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="w-full justify-start">
           <CalendarIcon className="mr-2 h-4 w-4" />
@@ -113,14 +131,17 @@ export function DateRangeSelector({
         className="w-80"
         align="start"
         onInteractOutside={(e) => {
-          // Prevent dropdown from closing when clicking on calendar popovers
-          const target = e.target as HTMLElement;
-          if (
-            target.closest('[role="dialog"]') ||
-            openCustomDate ||
-            openCustomRange
-          ) {
+          // Prevent dropdown from closing while a custom calendar popover is open
+          if (openCustomDate || openCustomRange) {
             e.preventDefault();
+            return;
+          }
+        }}
+        onPointerDownOutside={(e) => {
+          // Prevent dropdown from closing when clicking on calendar popovers
+          if (openCustomDate || openCustomRange) {
+            e.preventDefault();
+            return;
           }
         }}
       >
@@ -135,6 +156,7 @@ export function DateRangeSelector({
             value="custom-date"
             onSelect={(e) => {
               e.preventDefault();
+              e.stopPropagation();
               setOpenCustomDate(true);
             }}
           >
@@ -149,7 +171,13 @@ export function DateRangeSelector({
                   <span>Custom date</span>
                 </div>
               </PopoverAnchor>
-              <PopoverContent className="w-auto p-0" align="start" side="right">
+              <PopoverContent
+                className="w-auto p-0"
+                align="start"
+                side="right"
+                onInteractOutside={(e) => e.preventDefault()}
+                onPointerDownOutside={(e) => e.preventDefault()}
+              >
                 <Calendar
                   mode="single"
                   selected={customDate}
@@ -172,6 +200,7 @@ export function DateRangeSelector({
             value="custom-range"
             onSelect={(e) => {
               e.preventDefault();
+              e.stopPropagation();
               setOpenCustomRange(true);
             }}
           >
@@ -186,30 +215,68 @@ export function DateRangeSelector({
                   <span>Custom range</span>
                 </div>
               </PopoverAnchor>
-              <PopoverContent className="w-auto p-0" align="start" side="right">
-                <Calendar
-                  mode="range"
-                  defaultMonth={customStartDate}
-                  selected={{
-                    from: customStartDate,
-                    to: customEndDate,
-                  }}
-                  onSelect={(range) => {
-                    if (range?.from) {
-                      setCustomStartDate(range.from);
-                    }
-                    if (range?.to) {
-                      setCustomEndDate(range.to);
-                      setOpenCustomRange(false);
-                      setDropdownOpen(false);
-                      if (onValueChange && range.from) {
-                        onValueChange("custom-range", range.from, range.to);
+              <PopoverContent
+                className="w-auto p-0"
+                align="start"
+                side="right"
+                onInteractOutside={(e) => e.preventDefault()}
+                onPointerDownOutside={(e) => e.preventDefault()}
+              >
+                <div className="flex flex-col">
+                  <Calendar
+                    mode="range"
+                    defaultMonth={customStartDate}
+                    selected={{
+                      from: customStartDate,
+                      to: customEndDate,
+                    }}
+                    onSelect={(range) => {
+                      if (range?.from) {
+                        setCustomStartDate(range.from);
                       }
-                    }
-                  }}
-                  numberOfMonths={2}
-                  className="rounded-lg"
-                />
+                      if (range?.to) {
+                        setCustomEndDate(range.to);
+                      } else {
+                        setCustomEndDate(undefined);
+                      }
+                    }}
+                    numberOfMonths={2}
+                    className="rounded-lg"
+                  />
+                  <div className="flex items-center justify-end gap-2 border-t p-3">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setCustomStartDate(undefined);
+                        setCustomEndDate(undefined);
+                        setOpenCustomRange(false);
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      size="sm"
+                      disabled={!customStartDate || !customEndDate}
+                      onClick={() => {
+                        if (customStartDate && customEndDate) {
+                          setOpenCustomRange(false);
+                          setDropdownOpen(false);
+                          setDateRange("custom-range");
+                          if (onValueChange) {
+                            onValueChange(
+                              "custom-range",
+                              customStartDate,
+                              customEndDate
+                            );
+                          }
+                        }
+                      }}
+                    >
+                      Apply
+                    </Button>
+                  </div>
+                </div>
               </PopoverContent>
             </Popover>
           </DropdownMenuRadioItem>
