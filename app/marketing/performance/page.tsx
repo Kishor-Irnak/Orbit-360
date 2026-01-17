@@ -40,7 +40,7 @@ export default function Page() {
             <RoasTrendChart />
             <ChartAreaInteractive data={data.areaChartData} />
           </div>
-          <CampaignsTable data={campaignData} />
+          <CampaignsTable data={campaignData.campaigns} />
         </div>
       </div>
     </div>

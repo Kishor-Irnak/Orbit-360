@@ -11,8 +11,8 @@ export default function CampaignsPage() {
           <DateRangeSelector defaultValue="today" />
         </div>
         <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-          <CampaignCards />
-          <CampaignsTable data={data} />
+          <CampaignCards data={data.cards} />
+          <CampaignsTable data={data.campaigns} />
         </div>
       </div>
     </div>

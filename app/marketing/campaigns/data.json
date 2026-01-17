@@ -1,74 +1,110 @@
-[
-  {
-    "id": "CMP-001",
-    "name": "US_Prospecting_Broad_Q3",
-    "category": "Broad prospecting in US | ROAS: 4.12x | CTR: 1.8%",
-    "price": "₹12,450",
-    "stock": 543,
-    "status": "In Stock",
-    "image": "https://placehold.co/100x100/4f46e5/white?text=US+Broad"
-  },
-  {
-    "id": "CMP-002",
-    "name": "US_Retargeting_DPA_7D",
-    "category": "Dynamic Product Ads retargeting | ROAS: 5.89x | CTR: 2.9%",
-    "price": "₹8,200",
-    "stock": 612,
-    "status": "In Stock",
-    "image": "https://placehold.co/100x100/ec4899/white?text=US+DPA"
-  },
-  {
-    "id": "CMP-003",
-    "name": "EU_Lookalike_1%",
-    "category": "1% lookalike in Europe | ROAS: 2.15x | CTR: 1.1%",
-    "price": "₹18,500",
-    "stock": 230,
-    "status": "Low Stock",
-    "image": "https://placehold.co/100x100/3b82f6/white?text=EU+LAL"
-  },
-  {
-    "id": "CMP-004",
-    "name": "US_Advantage+_Shopping",
-    "category": "Meta Advantage+ automated | ROAS: 6.69x | CTR: 3.1%",
-    "price": "₹22,100",
-    "stock": 687,
-    "status": "In Stock",
-    "image": "https://placehold.co/100x100/8b5cf6/white?text=Advantage%2B"
-  },
-  {
-    "id": "CMP-005",
-    "name": "UK_Prospecting_Interests",
-    "category": "Interest-based UK targeting | ROAS: 1.85x | CTR: 0.9%",
-    "price": "₹4,500",
-    "stock": 89,
-    "status": "Low Stock",
-    "image": "https://placehold.co/100x100/ef4444/white?text=UK+Interest"
-  },
-  {
-    "id": "CMP-006",
-    "name": "CA_Retargeting_Engaged_30D",
-    "category": "Canadian engagement retargeting | ROAS: 2.80x | CTR: 1.4%",
-    "price": "₹5,600",
-    "stock": 145,
-    "status": "In Stock",
-    "image": "https://placehold.co/100x100/10b981/white?text=CA+Retarget"
-  },
-  {
-    "id": "CMP-007",
-    "name": "AU_Lookalike_3%",
-    "category": "3% lookalike in Australia | ROAS: 3.10x | CTR: 1.3%",
-    "price": "₹16,200",
-    "stock": 310,
-    "status": "Low Stock",
-    "image": "https://placehold.co/100x100/f59e0b/white?text=AU+LAL"
-  },
-  {
-    "id": "CMP-008",
-    "name": "US_Catalog_Sales_ABO",
-    "category": "Catalog sales with ABO | ROAS: 1.45x | CTR: 0.8%",
-    "price": "₹24,500",
-    "stock": 67,
-    "status": "Out of Stock",
-    "image": "https://placehold.co/100x100/6366f1/white?text=Catalog"
-  }
-]
+{
+  "cards": [
+    {
+      "title": "Active Campaigns",
+      "value": "8",
+      "badge": "+12%",
+      "badgeIcon": "trending-up",
+      "subtext": "Scaling efficiently",
+      "footer": "Across all platforms"
+    },
+    {
+      "title": "Total Ad Spend",
+      "value": "₹1.2M",
+      "badge": "MoM",
+      "badgeIcon": "currency-dollar",
+      "subtext": "Within budget",
+      "footer": "Daily cap optimized"
+    },
+    {
+      "title": "Avg. ROAS",
+      "value": "3.8x",
+      "badge": "Healthy",
+      "badgeIcon": "trending-up",
+      "subtext": "Exceeding targets",
+      "footer": "Return on Ad Spend"
+    },
+    {
+      "title": "Total Conversions",
+      "value": "2,456",
+      "badge": "High",
+      "badgeIcon": "click",
+      "subtext": "Conversion rate up",
+      "footer": "Strong performance"
+    }
+  ],
+  "campaigns": [
+    {
+      "id": "CMP-001",
+      "name": "US_Prospecting_Broad_Q3",
+      "category": "Broad prospecting in US | ROAS: 4.12x | CTR: 1.8%",
+      "price": "₹12,450",
+      "stock": 543,
+      "status": "In Stock",
+      "image": "https://placehold.co/100x100/4f46e5/white?text=US+Broad"
+    },
+    {
+      "id": "CMP-002",
+      "name": "US_Retargeting_DPA_7D",
+      "category": "Dynamic Product Ads retargeting | ROAS: 5.89x | CTR: 2.9%",
+      "price": "₹8,200",
+      "stock": 612,
+      "status": "In Stock",
+      "image": "https://placehold.co/100x100/ec4899/white?text=US+DPA"
+    },
+    {
+      "id": "CMP-003",
+      "name": "EU_Lookalike_1%",
+      "category": "1% lookalike in Europe | ROAS: 2.15x | CTR: 1.1%",
+      "price": "₹18,500",
+      "stock": 230,
+      "status": "Low Stock",
+      "image": "https://placehold.co/100x100/3b82f6/white?text=EU+LAL"
+    },
+    {
+      "id": "CMP-004",
+      "name": "US_Advantage+_Shopping",
+      "category": "Meta Advantage+ automated | ROAS: 6.69x | CTR: 3.1%",
+      "price": "₹22,100",
+      "stock": 687,
+      "status": "In Stock",
+      "image": "https://placehold.co/100x100/8b5cf6/white?text=Advantage%2B"
+    },
+    {
+      "id": "CMP-005",
+      "name": "UK_Prospecting_Interests",
+      "category": "Interest-based UK targeting | ROAS: 1.85x | CTR: 0.9%",
+      "price": "₹4,500",
+      "stock": 89,
+      "status": "Low Stock",
+      "image": "https://placehold.co/100x100/ef4444/white?text=UK+Interest"
+    },
+    {
+      "id": "CMP-006",
+      "name": "CA_Retargeting_Engaged_30D",
+      "category": "Canadian engagement retargeting | ROAS: 2.80x | CTR: 1.4%",
+      "price": "₹5,600",
+      "stock": 145,
+      "status": "In Stock",
+      "image": "https://placehold.co/100x100/10b981/white?text=CA+Retarget"
+    },
+    {
+      "id": "CMP-007",
+      "name": "AU_Lookalike_3%",
+      "category": "3% lookalike in Australia | ROAS: 3.10x | CTR: 1.3%",
+      "price": "₹16,200",
+      "stock": 310,
+      "status": "Low Stock",
+      "image": "https://placehold.co/100x100/f59e0b/white?text=AU+LAL"
+    },
+    {
+      "id": "CMP-008",
+      "name": "US_Catalog_Sales_ABO",
+      "category": "Catalog sales with ABO | ROAS: 1.45x | CTR: 0.8%",
+      "price": "₹24,500",
+      "stock": 67,
+      "status": "Out of Stock",
+      "image": "https://placehold.co/100x100/6366f1/white?text=Catalog"
+    }
+  ]
+}
