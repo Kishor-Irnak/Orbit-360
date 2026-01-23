@@ -100,16 +100,16 @@ const data = {
       icon: Truck,
       items: [
         {
+          title: "Inventory",
+          url: "/logistics/inventory",
+        },
+        {
           title: "Tracking",
           url: "/logistics/tracking",
         },
         {
           title: "Returns",
           url: "/logistics/returns",
-        },
-        {
-          title: "Warehouses",
-          url: "/logistics/warehouses",
         },
       ],
     },
@@ -172,7 +172,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       // Check if any sub-item matches the current path
       if (item.items) {
         const hasActiveSubItem = item.items.some((subItem) =>
-          isActive(subItem.url)
+          isActive(subItem.url),
         );
         if (hasActiveSubItem) {
           newOpenItems[item.title] = true;
