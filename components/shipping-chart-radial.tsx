@@ -20,26 +20,38 @@ import {
 
 export const description = "A radial chart with stacked sections";
 
-const chartData = [{ month: "january", FASR: 1260, NDR_Delivery: 570 }];
+const chartData = [
+  {
+    month: "january",
+    Forward: 850,
+    OverWeight: 420,
+    RTO: 150,
+  },
+];
 
 const chartConfig = {
-  FASR: {
-    label: "FASR",
+  Forward: {
+    label: "Forward",
     color: "var(--chart-1)",
   },
-  NDR_Delivery: {
-    label: "NDR_Delivery",
+  OverWeight: {
+    label: "OverWeight",
     color: "var(--chart-2)",
+  },
+  RTO: {
+    label: "RTO",
+    color: "var(--chart-3)",
   },
 } satisfies ChartConfig;
 
-export function ChartRadialStacked() {
-  const totalVisitors = chartData[0].FASR + chartData[0].NDR_Delivery;
+export function ShippingChartRadialStacked() {
+  const totalShipments =
+    chartData[0].Forward + chartData[0].OverWeight + chartData[0].RTO;
 
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Delivery Metrics</CardTitle>
+        <CardTitle>shipping Charges</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-1 items-center pb-0">
@@ -70,14 +82,14 @@ export function ChartRadialStacked() {
                           y={(viewBox.cy || 0) - 20}
                           className="fill-foreground text-2xl font-bold"
                         >
-                          {totalVisitors.toLocaleString()}
+                          {totalShipments.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) - 2}
                           className="fill-muted-foreground"
                         >
-                          Visitors
+                          Shipments
                         </tspan>
                       </text>
                     );
@@ -86,15 +98,22 @@ export function ChartRadialStacked() {
               />
             </PolarRadiusAxis>
             <RadialBar
-              dataKey="FASR"
+              dataKey="Forward"
+              fill="var(--color-Forward)"
               stackId="a"
               cornerRadius={10}
-              fill="var(--color-FASR)"
               className="stroke-transparent stroke-2"
             />
             <RadialBar
-              dataKey="NDR_Delivery"
-              fill="var(--color-NDR_Delivery)"
+              dataKey="OverWeight"
+              fill="var(--color-OverWeight)"
+              stackId="a"
+              cornerRadius={10}
+              className="stroke-transparent stroke-2"
+            />
+            <RadialBar
+              dataKey="RTO"
+              fill="var(--color-RTO)"
               stackId="a"
               cornerRadius={10}
               className="stroke-transparent stroke-2"
@@ -108,7 +127,7 @@ export function ChartRadialStacked() {
           <IconTrendingUp className="h-4 w-4 text-emerald-500" />
         </div>
         <div className="leading-none text-muted-foreground text-xs">
-          Showing total visitors for last 6 months
+          Showing total shipments for the current period
         </div>
       </CardFooter>
     </Card>

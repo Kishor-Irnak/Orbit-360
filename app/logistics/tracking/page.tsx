@@ -1,7 +1,7 @@
 import { DateRangeSelector } from "@/components/date-range-selector";
 import { TrackingTable } from "@/components/tracking-table";
 import data from "./data.json";
-import { SectionCards } from "@/components/tracking-section-cards";
+import { TrackingSectionCards } from "@/components/tracking-section-cards";
 
 export default function TrackingPage() {
   return (
@@ -11,7 +11,7 @@ export default function TrackingPage() {
           <DateRangeSelector defaultValue="today" />
         </div>
         <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-          <SectionCards />
+          <TrackingSectionCards />
           <TrackingTable data={data} />
         </div>
       </div>
