@@ -12,6 +12,7 @@ import {
   type DragEndEvent,
   type UniqueIdentifier,
 } from "@dnd-kit/core";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import {
   arrayMove,
   SortableContext,
@@ -20,8 +21,29 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import {
+  IconChevronDown,
+  IconChevronLeft,
+  IconChevronRight,
+  IconChevronsLeft,
+  IconChevronsRight,
+  IconCircleCheckFilled,
+  IconDotsVertical,
+  IconGripVertical,
+  IconLayoutColumns,
+  IconLoader,
+  IconPlus,
+  IconTrendingUp,
+  IconPackage,
+  IconTruckDelivery,
+  IconX,
+  IconMapPin,
+  IconCalendarEvent,
+} from "@tabler/icons-react";
+import {
   flexRender,
   getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
@@ -32,14 +54,7 @@ import {
   type SortingState,
   type VisibilityState,
 } from "@tanstack/react-table";
-import {
-  ArrowUpDown,
-  ChevronDown,
-  GripVertical,
-  MoreHorizontal,
-  Package,
-  Search,
-} from "lucide-react";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -66,6 +81,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 import {
   Table,
   TableBody,
@@ -74,7 +98,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const trackingSchema = z.object({
   id: z.string(),
@@ -83,9 +107,8 @@ export const trackingSchema = z.object({
   origin: z.string(),
   destination: z.string(),
   status: z.string(),
-  estimatedDelivery: z.string(),
-  lastUpdate: z.string(),
   currentLocation: z.string(),
+  estimatedDelivery: z.string(),
 });
 
 // Create a separate component for the drag handle
@@ -96,13 +119,13 @@ function DragHandle({ id }: { id: string }) {
 
   return (
     <Button
-      variant="ghost"
-      size="icon"
-      className="h-8 w-8 cursor-grab active:cursor-grabbing"
       {...attributes}
       {...listeners}
+      variant="ghost"
+      size="icon"
+      className="text-muted-foreground size-7 hover:bg-transparent"
     >
-      <GripVertical className="h-4 w-4" />
+      <IconGripVertical className="text-muted-foreground size-3" />
       <span className="sr-only">Drag to reorder</span>
     </Button>
   );
@@ -117,21 +140,25 @@ const columns: ColumnDef<z.infer<typeof trackingSchema>>[] = [
   {
     id: "select",
     header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
+      <div className="flex items-center justify-center">
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      </div>
     ),
     cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
+      <div className="flex items-center justify-center">
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      </div>
     ),
     enableSorting: false,
     enableHiding: false,
@@ -139,49 +166,60 @@ const columns: ColumnDef<z.infer<typeof trackingSchema>>[] = [
   {
     accessorKey: "trackingNumber",
     header: "Tracking Number",
-    cell: ({ row }) => (
-      <div className="font-medium">{row.getValue("trackingNumber")}</div>
-    ),
+    cell: ({ row }) => {
+      return <TableCellViewer item={row.original} />;
+    },
     enableHiding: false,
   },
   {
     accessorKey: "carrier",
     header: "Carrier",
-    cell: ({ row }) => <div>{row.getValue("carrier")}</div>,
+    cell: ({ row }) => (
+      <div className="font-medium text-sm">{row.original.carrier}</div>
+    ),
   },
   {
     accessorKey: "origin",
     header: "Origin",
     cell: ({ row }) => (
-      <div className="text-muted-foreground">{row.getValue("origin")}</div>
+      <div className="text-muted-foreground text-sm">{row.original.origin}</div>
     ),
   },
   {
     accessorKey: "destination",
     header: "Destination",
     cell: ({ row }) => (
-      <div className="text-muted-foreground">{row.getValue("destination")}</div>
+      <div className="text-muted-foreground text-sm">
+        {row.original.destination}
+      </div>
     ),
   },
   {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-      const status = row.getValue("status") as string;
+      const status = row.original.status;
+      let colorClass = "text-muted-foreground";
+      let icon = <IconLoader className="size-3" />;
+
+      if (status === "Delivered") {
+        icon = (
+          <IconCircleCheckFilled className="fill-green-500 dark:fill-green-400 size-3" />
+        );
+        colorClass = "text-green-600 dark:text-green-400";
+      } else if (status === "In Transit" || status === "Out for Delivery") {
+        icon = <IconTruckDelivery className="size-3" />;
+        colorClass = "text-blue-600 dark:text-blue-400";
+      } else if (status === "Delayed") {
+        icon = <IconX className="size-3" />;
+        colorClass = "text-red-600 dark:text-red-400";
+      } else if (status === "Processing") {
+        colorClass = "text-amber-600 dark:text-amber-400";
+      }
+
       return (
-        <Badge
-          variant={
-            status === "Delivered"
-              ? "default"
-              : status === "Out for Delivery"
-                ? "secondary"
-                : status === "In Transit"
-                  ? "outline"
-                  : status === "Delayed"
-                    ? "destructive"
-                    : "outline"
-          }
-        >
+        <Badge variant="outline" className={`px-1.5 gap-1 ${colorClass}`}>
+          {icon}
           {status}
         </Badge>
       );
@@ -189,32 +227,44 @@ const columns: ColumnDef<z.infer<typeof trackingSchema>>[] = [
   },
   {
     accessorKey: "currentLocation",
-    header: "Current Location",
-    cell: ({ row }) => <div>{row.getValue("currentLocation")}</div>,
+    header: "Location",
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <IconMapPin className="size-3" />
+        {row.original.currentLocation}
+      </div>
+    ),
   },
   {
     accessorKey: "estimatedDelivery",
-    header: () => <div>Est. Delivery</div>,
-    cell: ({ row }) => {
-      const date = new Date(row.getValue("estimatedDelivery"));
-      return <div>{date.toLocaleDateString()}</div>;
-    },
+    header: () => <div className="text-right">Est. Delivery</div>,
+    cell: ({ row }) => (
+      <div className="text-right text-sm">
+        {new Date(row.original.estimatedDelivery).toLocaleDateString()}
+      </div>
+    ),
   },
   {
     id: "actions",
     cell: () => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
+          <Button
+            variant="ghost"
+            className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+            size="icon"
+          >
+            <IconDotsVertical />
             <span className="sr-only">Open menu</span>
-            <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem>View details</DropdownMenuItem>
+        <DropdownMenuContent align="end" className="w-32">
+          <DropdownMenuItem>View Details</DropdownMenuItem>
+          <DropdownMenuItem>Update Status</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Update status</DropdownMenuItem>
+          <DropdownMenuItem variant="destructive">
+            Delete Record
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     ),
@@ -222,28 +272,20 @@ const columns: ColumnDef<z.infer<typeof trackingSchema>>[] = [
 ];
 
 function DraggableRow({ row }: { row: Row<z.infer<typeof trackingSchema>> }) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({
+  const { transform, transition, setNodeRef, isDragging } = useSortable({
     id: row.original.id,
   });
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.5 : 1,
-  };
-
   return (
     <TableRow
-      ref={setNodeRef}
-      style={style}
       data-state={row.getIsSelected() && "selected"}
+      data-dragging={isDragging}
+      ref={setNodeRef}
+      className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition: transition,
+      }}
     >
       {row.getVisibleCells().map((cell) => (
         <TableCell key={cell.id}>
@@ -259,317 +301,380 @@ export function TrackingTable({
 }: {
   data: z.infer<typeof trackingSchema>[];
 }) {
-  const [data, setData] = React.useState(initialData);
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [data, setData] = React.useState(() => initialData);
+  const [rowSelection, setRowSelection] = React.useState({});
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
-  const [activeTab, setActiveTab] = React.useState("all");
-  const isMobile = useIsMobile();
-
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+  const sortableId = React.useId();
   const sensors = useSensors(
-    useSensor(MouseSensor, {
-      activationConstraint: {
-        distance: 5,
-      },
-    }),
-    useSensor(TouchSensor, {
-      activationConstraint: {
-        delay: 250,
-        tolerance: 5,
-      },
-    }),
-    useSensor(KeyboardSensor),
+    useSensor(MouseSensor, {}),
+    useSensor(TouchSensor, {}),
+    useSensor(KeyboardSensor, {}),
+  );
+
+  const dataIds = React.useMemo<UniqueIdentifier[]>(
+    () => data?.map(({ id }) => id) || [],
+    [data],
   );
 
   const table = useReactTable({
     data,
     columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    getRowId: (row) => row.id,
     state: {
       sorting,
-      columnFilters,
       columnVisibility,
       rowSelection,
+      columnFilters,
+      pagination,
     },
+    getRowId: (row) => row.id,
+    enableRowSelection: true,
+    onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    onPaginationChange: setPagination,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
-
-    if (over && active.id !== over.id) {
-      setData((items) => {
-        const oldIndex = items.findIndex((item) => item.id === active.id);
-        const newIndex = items.findIndex((item) => item.id === over.id);
-        return arrayMove(items, oldIndex, newIndex);
+    if (active && over && active.id !== over.id) {
+      setData((data) => {
+        const oldIndex = data.findIndex((item) => item.id === active.id);
+        const newIndex = data.findIndex((item) => item.id === over.id);
+        return arrayMove(data, oldIndex, newIndex);
       });
     }
   }
 
-  // Filter data based on active tab
-  function handleTabChange(value: string) {
+  const [activeTab, setActiveTab] = React.useState("all");
+
+  const handleTabChange = (value: string) => {
     setActiveTab(value);
     if (value === "all") {
-      table.getColumn("status")?.setFilterValue(undefined);
-    } else {
-      const statusMap: Record<string, string> = {
-        transit: "In Transit",
-        delivered: "Delivered",
-        delayed: "Delayed",
-      };
-      table.getColumn("status")?.setFilterValue(statusMap[value]);
+      setData(initialData);
+    } else if (value === "transit") {
+      setData(
+        initialData.filter(
+          (item) =>
+            item.status === "In Transit" || item.status === "Out for Delivery",
+        ),
+      );
+    } else if (value === "delivered") {
+      setData(initialData.filter((item) => item.status === "Delivered"));
+    } else if (value === "delayed") {
+      setData(initialData.filter((item) => item.status === "Delayed"));
     }
-  }
+    table.setPageIndex(0);
+  };
+
+  const transitCount = initialData.filter(
+    (item) =>
+      item.status === "In Transit" || item.status === "Out for Delivery",
+  ).length;
+  const deliveredCount = initialData.filter(
+    (item) => item.status === "Delivered",
+  ).length;
 
   return (
-    <div className="w-full px-6">
-      <div className="flex items-center justify-between pb-4">
-        <div className="flex flex-1 items-center gap-2">
-          <div className="relative flex-1 max-w-sm">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search tracking numbers..."
-              value={
-                (table
-                  .getColumn("trackingNumber")
-                  ?.getFilterValue() as string) ?? ""
-              }
-              onChange={(event) =>
-                table
-                  .getColumn("trackingNumber")
-                  ?.setFilterValue(event.target.value)
-              }
-              className="pl-8"
-            />
-          </div>
-        </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-
-      <Tabs value={activeTab} onValueChange={handleTabChange} className="mb-4">
-        <TabsList>
+    <Tabs
+      defaultValue="all"
+      className="w-full flex-col justify-start gap-6"
+      onValueChange={handleTabChange}
+    >
+      <div className="flex items-center justify-between px-4 lg:px-6">
+        <TabsList className="**:data-[slot=badge]:bg-muted-foreground/30 hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:px-1 @4xl/main:flex">
           <TabsTrigger value="all">All Shipments</TabsTrigger>
-          <TabsTrigger value="transit">In Transit</TabsTrigger>
-          <TabsTrigger value="delivered">Delivered</TabsTrigger>
+          <TabsTrigger value="transit">
+            In Transit <Badge variant="secondary">{transitCount}</Badge>
+          </TabsTrigger>
+          <TabsTrigger value="delivered">
+            Delivered <Badge variant="secondary">{deliveredCount}</Badge>
+          </TabsTrigger>
           <TabsTrigger value="delayed">Delayed</TabsTrigger>
         </TabsList>
-      </Tabs>
-
-      <div className="rounded-md border">
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext(),
-                            )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              <SortableContext
-                items={data.map((item) => item.id)}
-                strategy={verticalListSortingStrategy}
-              >
+        <div className="flex items-center gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm">
+                <IconLayoutColumns />
+                <span className="hidden lg:inline">Customize Columns</span>
+                <span className="lg:hidden">Columns</span>
+                <IconChevronDown />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              {table
+                .getAllColumns()
+                .filter(
+                  (column) =>
+                    typeof column.accessorFn !== "undefined" &&
+                    column.getCanHide(),
+                )
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <Button variant="outline" size="sm">
+            <IconPlus />
+            <span className="hidden lg:inline">New Record</span>
+          </Button>
+        </div>
+      </div>
+      <div className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">
+        <div className="overflow-hidden rounded-lg border">
+          <DndContext
+            collisionDetection={closestCenter}
+            modifiers={[restrictToVerticalAxis]}
+            onDragEnd={handleDragEnd}
+            sensors={sensors}
+            id={sortableId}
+          >
+            <Table>
+              <TableHeader className="bg-muted sticky top-0 z-10">
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => {
+                      return (
+                        <TableHead key={header.id} colSpan={header.colSpan}>
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext(),
+                              )}
+                        </TableHead>
+                      );
+                    })}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody className="**:data-[slot=table-cell]:first:w-8">
                 {table.getRowModel().rows?.length ? (
-                  table
-                    .getRowModel()
-                    .rows.map((row) => <DraggableRow key={row.id} row={row} />)
+                  <SortableContext
+                    items={dataIds}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    {table.getRowModel().rows.map((row) => (
+                      <DraggableRow key={row.id} row={row} />
+                    ))}
+                  </SortableContext>
                 ) : (
                   <TableRow>
                     <TableCell
                       colSpan={columns.length}
                       className="h-24 text-center"
                     >
-                      No shipments found.
+                      No results.
                     </TableCell>
                   </TableRow>
                 )}
-              </SortableContext>
-            </TableBody>
-          </Table>
-        </DndContext>
+              </TableBody>
+            </Table>
+          </DndContext>
+        </div>
+        <div className="flex items-center justify-between px-4">
+          <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
+            {table.getFilteredSelectedRowModel().rows.length} of{" "}
+            {table.getFilteredRowModel().rows.length} row(s) selected.
+          </div>
+          <div className="flex w-full items-center gap-8 lg:w-fit">
+            <div className="hidden items-center gap-2 lg:flex">
+              <Label htmlFor="rows-per-page" className="text-sm font-medium">
+                Rows per page
+              </Label>
+              <Select
+                value={`${table.getState().pagination.pageSize}`}
+                onValueChange={(value) => {
+                  table.setPageSize(Number(value));
+                }}
+              >
+                <SelectTrigger size="sm" className="w-20" id="rows-per-page">
+                  <SelectValue
+                    placeholder={table.getState().pagination.pageSize}
+                  />
+                </SelectTrigger>
+                <SelectContent side="top">
+                  {[10, 20, 30, 40, 50].map((pageSize) => (
+                    <SelectItem key={pageSize} value={`${pageSize}`}>
+                      {pageSize}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex w-fit items-center justify-center text-sm font-medium">
+              Page {table.getState().pagination.pageIndex + 1} of{" "}
+              {table.getPageCount()}
+            </div>
+            <div className="ml-auto flex items-center gap-2 lg:ml-0">
+              <Button
+                variant="outline"
+                className="hidden h-8 w-8 p-0 lg:flex"
+                onClick={() => table.setPageIndex(0)}
+                disabled={!table.getCanPreviousPage()}
+              >
+                <span className="sr-only">Go to first page</span>
+                <IconChevronsLeft />
+              </Button>
+              <Button
+                variant="outline"
+                className="size-8"
+                size="icon"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
+                <span className="sr-only">Go to previous page</span>
+                <IconChevronLeft />
+              </Button>
+              <Button
+                variant="outline"
+                className="size-8"
+                size="icon"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                <span className="sr-only">Go to next page</span>
+                <IconChevronRight />
+              </Button>
+              <Button
+                variant="outline"
+                className="hidden size-8 lg:flex"
+                size="icon"
+                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                disabled={!table.getCanNextPage()}
+              >
+                <span className="sr-only">Go to last page</span>
+                <IconChevronsRight />
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
-
-      {isMobile && (
-        <div className="mt-4 space-y-4">
-          {table.getRowModel().rows.map((row) => (
-            <TableCellViewer key={row.id} item={row.original} />
-          ))}
-        </div>
-      )}
-    </div>
+    </Tabs>
   );
 }
 
 function TableCellViewer({ item }: { item: z.infer<typeof trackingSchema> }) {
-  const date = new Date(item.estimatedDelivery);
+  const isMobile = useIsMobile();
 
   return (
-    <Drawer>
+    <Drawer direction={isMobile ? "bottom" : "right"}>
       <DrawerTrigger asChild>
-        <div className="rounded-lg border bg-card p-4 cursor-pointer hover:bg-accent transition-colors">
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-2">
-              <Package className="h-5 w-5 text-muted-foreground" />
-              <div>
-                <div className="font-medium">{item.trackingNumber}</div>
-                <div className="text-sm text-muted-foreground">
-                  {item.carrier}
-                </div>
-              </div>
-            </div>
-            <Badge
-              variant={
-                item.status === "Delivered"
-                  ? "default"
-                  : item.status === "Out for Delivery"
-                    ? "secondary"
-                    : item.status === "In Transit"
-                      ? "outline"
-                      : item.status === "Delayed"
-                        ? "destructive"
-                        : "outline"
-              }
-            >
-              {item.status}
-            </Badge>
-          </div>
-          <div className="mt-2 text-sm">
-            <div className="text-muted-foreground">
-              {item.origin} → {item.destination}
-            </div>
-            <div className="mt-1">Current: {item.currentLocation}</div>
-          </div>
-        </div>
+        <Button
+          variant="link"
+          className="text-foreground w-fit px-0 text-left font-medium"
+        >
+          {item.trackingNumber}
+        </Button>
       </DrawerTrigger>
       <DrawerContent>
-        <DrawerHeader>
-          <DrawerTitle>Shipment Details</DrawerTitle>
+        <DrawerHeader className="gap-1">
+          <DrawerTitle>Shipment {item.trackingNumber}</DrawerTitle>
           <DrawerDescription>
-            Tracking Number: {item.trackingNumber}
+            Carrier: {item.carrier} | {item.origin} → {item.destination}
           </DrawerDescription>
         </DrawerHeader>
-        <div className="p-4 space-y-4">
-          <div>
-            <div className="text-sm font-medium">Carrier</div>
-            <div className="text-sm text-muted-foreground">{item.carrier}</div>
-          </div>
-          <div>
-            <div className="text-sm font-medium">Status</div>
-            <div className="mt-1">
-              <Badge
-                variant={
-                  item.status === "Delivered"
-                    ? "default"
-                    : item.status === "Out for Delivery"
-                      ? "secondary"
-                      : item.status === "In Transit"
-                        ? "outline"
-                        : item.status === "Delayed"
-                          ? "destructive"
-                          : "outline"
-                }
-              >
-                {item.status}
-              </Badge>
+        <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm mb-4">
+          <div className="grid gap-2">
+            <div className="flex gap-2 items-center leading-none font-medium text-lg">
+              Status: <span className="text-blue-600">{item.status}</span>
+            </div>
+            <div className="text-muted-foreground flex items-center gap-2">
+              <IconMapPin className="size-4" /> {item.currentLocation}
             </div>
           </div>
-          <div>
-            <div className="text-sm font-medium">Route</div>
-            <div className="text-sm text-muted-foreground">
-              {item.origin} → {item.destination}
+          <Separator />
+          <div className="flex flex-col gap-4">
+            <h4 className="font-semibold text-base flex items-center gap-2">
+              <IconPackage className="size-5" /> Shipment Details
+            </h4>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+              <div className="flex flex-col gap-1 text-xs">
+                <span className="text-muted-foreground uppercase tracking-wider font-semibold">
+                  Origin
+                </span>
+                <span>{item.origin}</span>
+              </div>
+              <div className="flex flex-col gap-1 text-xs">
+                <span className="text-muted-foreground uppercase tracking-wider font-semibold">
+                  Destination
+                </span>
+                <span>{item.destination}</span>
+              </div>
+              <div className="flex flex-col gap-1 text-xs">
+                <span className="text-muted-foreground uppercase tracking-wider font-semibold">
+                  Carrier
+                </span>
+                <span>{item.carrier}</span>
+              </div>
+              <div className="flex flex-col gap-1 text-xs font-semibold text-blue-600">
+                <span className="text-muted-foreground uppercase tracking-wider font-normal">
+                  Current Location
+                </span>
+                <span>{item.currentLocation}</span>
+              </div>
             </div>
           </div>
-          <div>
-            <div className="text-sm font-medium">Current Location</div>
-            <div className="text-sm text-muted-foreground">
-              {item.currentLocation}
-            </div>
+          <Separator />
+          <div className="flex items-center gap-2 text-sm">
+            <IconCalendarEvent className="size-4 text-muted-foreground" />
+            <span className="font-medium text-muted-foreground line-clamp-1">
+              Expected Delivery:{" "}
+              {new Date(item.estimatedDelivery).toDateString()}
+            </span>
           </div>
-          <div>
-            <div className="text-sm font-medium">Estimated Delivery</div>
-            <div className="text-sm text-muted-foreground">
-              {date.toLocaleDateString()}
+          <Separator />
+          <form className="flex flex-col gap-4">
+            <div className="grid grid-cols-1 gap-4">
+              <div className="flex flex-col gap-3">
+                <Label htmlFor="status">Update Status</Label>
+                <Select defaultValue={item.status}>
+                  <SelectTrigger id="status" className="w-full">
+                    <SelectValue placeholder="Select a status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="In Transit">In Transit</SelectItem>
+                    <SelectItem value="Delivered">Delivered</SelectItem>
+                    <SelectItem value="Out for Delivery">
+                      Out for Delivery
+                    </SelectItem>
+                    <SelectItem value="Delayed">Delayed</SelectItem>
+                    <SelectItem value="Processing">Processing</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-          </div>
+          </form>
         </div>
         <DrawerFooter>
+          <Button>Save Changes</Button>
           <DrawerClose asChild>
             <Button variant="outline">Close</Button>
           </DrawerClose>
