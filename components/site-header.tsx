@@ -75,10 +75,16 @@ function HeaderBreadcrumbs() {
             const isLast = index === segments.length - 1 && !activeTab;
             const href = `/${segments.slice(0, index + 1).join("/")}`;
 
+            // Define categories that don't have direct pages
+            const categories = ["sales", "marketing", "logistics"];
+            const isCategory =
+              categories.includes(segment.toLowerCase()) &&
+              index < segments.length - 1;
+
             return (
               <Fragment key={href}>
                 <BreadcrumbItem>
-                  {isLast ? (
+                  {isLast || isCategory ? (
                     <BreadcrumbPage>{capitalize(segment)}</BreadcrumbPage>
                   ) : (
                     <BreadcrumbLink href={href}>
