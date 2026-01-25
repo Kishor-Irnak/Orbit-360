@@ -127,7 +127,7 @@ export default function SettingsPage() {
                       <Input
                         id="fullname"
                         defaultValue="Kishor Irnak"
-                        className="rounded-xl h-11 border-slate-200"
+                        className="rounded-xl h-11 border"
                       />
                     </div>
                     <div className="space-y-2">
@@ -135,7 +135,7 @@ export default function SettingsPage() {
                       <Input
                         id="email"
                         defaultValue="kishorirnak@gmail.com"
-                        className="rounded-xl h-11 border-slate-200"
+                        className="rounded-xl h-11 border"
                       />
                     </div>
                   </div>
@@ -190,7 +190,7 @@ export default function SettingsPage() {
                       <Clock className="h-4 w-4 text-slate-400" /> Timezone
                     </Label>
                     <Select defaultValue="ist">
-                      <SelectTrigger className="h-11 rounded-xl border-slate-200">
+                      <SelectTrigger className="h-11 rounded-xl border">
                         <SelectValue placeholder="Select timezone" />
                       </SelectTrigger>
                       <SelectContent className="rounded-xl shadow-2xl">
@@ -212,7 +212,7 @@ export default function SettingsPage() {
                       Currency
                     </Label>
                     <Select defaultValue="inr">
-                      <SelectTrigger className="h-11 rounded-xl border-slate-200">
+                      <SelectTrigger className="h-11 rounded-xl border">
                         <SelectValue placeholder="Select currency" />
                       </SelectTrigger>
                       <SelectContent className="rounded-xl shadow-2xl">
