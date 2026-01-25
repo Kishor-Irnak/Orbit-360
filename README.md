@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Orbit 360 - Dashboard Analytics
 
-## Getting Started
+Orbit 360 is a modern, high-performance dashboard analytics platform built with **Next.js 15**, **Tailwind CSS 4**, and **Shadcn UI**. It provides a comprehensive suite of tools for managing Sales, Marketing, and Logistics operations with a sleek, premium user interface.
 
-First, run the development server:
+## 🚀 Live Demo
+
+You can view the live project deployed on GitHub Pages:
+**[Orbit 360 Live](https://kishor-irnak.github.io/Orbit-360/)**
+
+---
+
+## ✨ Features
+
+- **📊 Advanced Analytics**: Real-time data visualization and performance tracking.
+- **🛒 Sales Management**: Manage orders, products, and customer data seamlessly.
+- **📣 Marketing Hub**: Track campaign performance, ROAS, and creative assets.
+- **🚚 Logistics Engine**: Monitor inventory, real-time shipment tracking, and returns.
+- **🌓 Dark Mode**: Built-in dark and light mode support with smooth transitions.
+- **📱 Fully Responsive**: Optimized for desktop, tablet, and mobile devices.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 15+](https://nextjs.org/) (App Router)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **UI Components**: [Shadcn UI](https://ui.shadcn.com/) / [Radix UI](https://www.radix-ui.com/)
+- **Icons**: [Lucide React](https://lucide.dev/) & [Tabler Icons](https://tabler-icons.io/)
+- **State Management**: React Hooks
+- **Deployment**: GitHub Pages (Static Export)
+
+---
+
+## 📂 Project Structure
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Orbit-360/
+├── app/                  # Next.js App Router (Pages & Layouts)
+│   ├── (auth)/           # Authentication routes
+│   ├── sales/            # Sales: Orders, Products, Customers
+│   ├── marketing/        # Marketing: Performance, Campaigns, Creatives
+│   ├── logistics/        # Logistics: Inventory, Tracking, Returns
+│   ├── analytics/        # Business Analytics dashboard
+│   ├── automation/       # Workflow automation settings
+│   ├── settings/         # Profile and System settings
+│   ├── globals.css       # Global styles & Tailwind utilities
+│   └── layout.tsx        # Main application layout
+├── components/           # Reusable React components
+│   ├── ui/               # Primitive components (buttons, dialogs, etc.)
+│   ├── charts/           # Recharts implementations
+│   ├── nav-main.tsx      # Sidebar navigation logic
+│   ├── site-header.tsx   # Top navigation & Breadcrumbs
+│   └── *-table.tsx       # Domain-specific data tables
+├── public/               # Static assets (Images, Logos, Favicon)
+├── hooks/                # Custom React hooks (useSidebar, etc.)
+├── lib/                  # Utility functions and shared logic
+├── next.config.ts        # Next.js configuration (basePath, export)
+└── package.json          # Dependencies and scripts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Getting Started
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Prerequisites
 
-## Learn More
+- Node.js 18+
+- npm / yarn / pnpm
 
-To learn more about Next.js, take a look at the following resources:
+### Installation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Clone the repository**:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```bash
+   git clone https://github.com/Kishor-Irnak/Orbit-360.git
+   cd Orbit-360
+   ```
 
-## Deploy on Vercel
+2. **Install dependencies**:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```bash
+   npm install
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) to see the result.
+
+---
+
+## 📦 Deployment
+
+This project is configured for **Static Export** to GitHub Pages.
+
+1. **Build and Deploy**:
+   ```bash
+   npm run deploy
+   ```
+   This command runs `next build` (which triggers `next export` via the `output: 'export'` config) and pushes the `out/` directory to the `gh-pages` branch.
+
+---
+
+## 📄 License
+
+Powered by **Evoc Labs**. All rights reserved.
