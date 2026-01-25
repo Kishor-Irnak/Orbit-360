@@ -138,9 +138,11 @@ const data = {
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSidebar } from "@/components/ui/sidebar";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
+  const { setOpenMobile, isMobile } = useSidebar();
   const [activeTeam, setActiveTeam] = React.useState(data.teams[0]);
   const { theme, resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
@@ -190,6 +192,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       ...prev,
       [title]: !prev[title],
     }));
+  };
+
+  const handleLinkClick = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
   };
 
   // Determine which logo to use based on theme
@@ -263,7 +271,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                                   asChild
                                   isActive={isActive(subItem.url)}
                                 >
-                                  <Link href={subItem.url}>
+                                  <Link
+                                    href={subItem.url}
+                                    onClick={handleLinkClick}
+                                  >
                                     <span>{subItem.title}</span>
                                   </Link>
                                 </SidebarMenuSubButton>
@@ -278,7 +289,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         isActive={isActive(item.url)}
                         asChild
                       >
-                        <Link href={item.url}>
+                        <Link href={item.url} onClick={handleLinkClick}>
                           {item.icon && <item.icon />}
                           <span>{item.title}</span>
                         </Link>
