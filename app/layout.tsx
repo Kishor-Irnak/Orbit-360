@@ -7,13 +7,11 @@ import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
-const basePath = process.env.NODE_ENV === "production" ? "/Orbit-360" : "";
-
 export const metadata: Metadata = {
   title: "Orbit 360",
   description: "Dashboard Analytics - Powered by Evoc Labs",
   icons: {
-    icon: `${basePath}/favicon.ico`,
+    icon: "/favicon.ico",
   },
 };
 
