@@ -6,7 +6,6 @@ import {
   Monitor,
   Briefcase,
   Layers,
-  Palette,
   Shield,
   CreditCard,
   Mail,
@@ -41,9 +40,13 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { toast } from "sonner";
 
 export default function SettingsPage() {
+  const handleSave = () => {
+    toast.success("Settings saved successfully!");
+  };
+
   return (
     <div className="flex flex-1 flex-col gap-6 p-4 lg:p-8 pt-0 max-w-6xl mx-auto w-full">
       <div className="flex flex-col gap-2">
@@ -54,7 +57,7 @@ export default function SettingsPage() {
       </div>
 
       <Tabs defaultValue="profile" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 h-auto p-1 bg-muted/50 rounded-xl">
+        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-5 h-auto p-1 bg-muted/50 rounded-xl">
           <TabsTrigger
             value="profile"
             className="py-2.5 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm"
@@ -90,13 +93,6 @@ export default function SettingsPage() {
             <Layers className="mr-2 h-4 w-4" />
             Apps
           </TabsTrigger>
-          <TabsTrigger
-            value="appearance"
-            className="py-2.5 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm"
-          >
-            <Palette className="mr-2 h-4 w-4" />
-            Design
-          </TabsTrigger>
         </TabsList>
 
         <div className="mt-6 space-y-6">
@@ -115,17 +111,10 @@ export default function SettingsPage() {
                     <div className="relative group">
                       <Avatar className="h-24 w-24 border-4 border-background shadow-lg group-hover:opacity-80 transition-opacity">
                         <AvatarImage src="" />
-                        <AvatarFallback className="text-xl bg-orange-100 text-orange-600 dark:bg-orange-900/20 dark:text-orange-400">
+                        <AvatarFallback className="text-xl bg-blue-100 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400">
                           KI
                         </AvatarFallback>
                       </Avatar>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="absolute -bottom-1 -right-1 h-8 w-8 rounded-full shadow-md bg-background"
-                      >
-                        <Palette className="h-3 w-3" />
-                      </Button>
                     </div>
                     <div className="space-y-1 text-center md:text-left">
                       <h4 className="font-semibold text-lg">Kishor Irnak</h4>
@@ -133,7 +122,12 @@ export default function SettingsPage() {
                         Admin • Evoc Labs
                       </p>
                       <div className="flex gap-2 pt-2 justify-center md:justify-start">
-                        <Button size="sm">Change Photo</Button>
+                        <Button
+                          size="sm"
+                          className="bg-blue-600 hover:bg-blue-700 text-white border-none"
+                        >
+                          Change Photo
+                        </Button>
                         <Button variant="ghost" size="sm">
                           Remove
                         </Button>
@@ -166,7 +160,7 @@ export default function SettingsPage() {
                         </SelectContent>
                       </Select>
                       <p className="text-[10px] text-muted-foreground flex items-center">
-                        <Shield className="mr-1 h-3 w-3" />
+                        <Shield className="mr-1 h-3 w-3 text-blue-500" />
                         Admin has full access to all modules and configurations.
                       </p>
                     </div>
@@ -227,7 +221,7 @@ export default function SettingsPage() {
                     <Label className="text-sm font-medium">
                       Low Inventory Threshold
                     </Label>
-                    <span className="text-sm font-bold text-orange-500">
+                    <span className="text-sm font-bold text-blue-600 dark:text-blue-400">
                       10 items
                     </span>
                   </div>
@@ -242,7 +236,7 @@ export default function SettingsPage() {
                     <Label className="text-sm font-medium">
                       Critical ROAS Alert
                     </Label>
-                    <span className="text-sm font-bold text-orange-500">
+                    <span className="text-sm font-bold text-blue-600 dark:text-blue-400">
                       2.5x
                     </span>
                   </div>
@@ -268,7 +262,7 @@ export default function SettingsPage() {
                     </div>
                     <div className="flex items-center justify-between space-x-2">
                       <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-purple-100 dark:bg-purple-900/20 text-purple-600">
+                        <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/20 text-blue-600">
                           <Smartphone className="h-4 w-4" />
                         </div>
                         <Label>Push App Notifications</Label>
@@ -447,8 +441,8 @@ export default function SettingsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-3">
                     <Label className="flex items-center gap-2 font-semibold">
-                      <Target className="h-4 w-4 text-orange-500" /> Revenue
-                      Targets
+                      <Target className="h-4 w-4 text-blue-600 dark:text-blue-400" />{" "}
+                      Revenue Targets
                     </Label>
                     <div className="space-y-2">
                       <Label htmlFor="rev-target" className="text-xs">
@@ -463,8 +457,8 @@ export default function SettingsPage() {
                   </div>
                   <div className="space-y-3">
                     <Label className="flex items-center gap-2 font-semibold">
-                      <Clock className="h-4 w-4 text-orange-500" /> Logistics
-                      Windows
+                      <Clock className="h-4 w-4 text-blue-600 dark:text-blue-400" />{" "}
+                      Logistics Windows
                     </Label>
                     <div className="space-y-2">
                       <Label htmlFor="return-window" className="text-xs">
@@ -511,7 +505,7 @@ export default function SettingsPage() {
                   </div>
                   <div className="flex items-center justify-between p-4 rounded-xl border bg-background/50">
                     <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-full bg-green-100 dark:bg-green-900/40 flex items-center justify-center text-green-600">
+                      <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-600">
                         <Webhook className="h-5 w-5" />
                       </div>
                       <div>
@@ -532,69 +526,15 @@ export default function SettingsPage() {
               </CardContent>
             </Card>
           </TabsContent>
-
-          {/* APPEARANCE & UI */}
-          <TabsContent value="appearance" className="space-y-6">
-            <Card className="border-none shadow-md bg-card/50 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle>Visual Theme</CardTitle>
-                <CardDescription>
-                  Personalize the look and feel of your Orbit 360 workspace.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-8">
-                <div className="space-y-4">
-                  <Label>Accent Color</Label>
-                  <div className="flex gap-4">
-                    <button className="h-8 w-8 rounded-full bg-orange-500 ring-2 ring-orange-500 ring-offset-2 ring-offset-background" />
-                    <button className="h-8 w-8 rounded-full bg-blue-500 opacity-60 hover:opacity-100 transition-opacity" />
-                    <button className="h-8 w-8 rounded-full bg-purple-500 opacity-60 hover:opacity-100 transition-opacity" />
-                    <button className="h-8 w-8 rounded-full bg-green-500 opacity-60 hover:opacity-100 transition-opacity" />
-                    <button className="h-8 w-8 rounded-full bg-rose-500 opacity-60 hover:opacity-100 transition-opacity" />
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <Label>Density Mode</Label>
-                  <RadioGroup
-                    defaultValue="comfortable"
-                    className="grid grid-cols-2 gap-4"
-                  >
-                    <div className="flex items-center space-x-2 p-3 rounded-lg border bg-background/50">
-                      <RadioGroupItem value="comfortable" id="m1" />
-                      <Label htmlFor="m1" className="flex-1 cursor-pointer">
-                        Default (Comfortable)
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2 p-3 rounded-lg border bg-background/50">
-                      <RadioGroupItem value="compact" id="m2" />
-                      <Label htmlFor="m2" className="flex-1 cursor-pointer">
-                        Compact (High density)
-                      </Label>
-                    </div>
-                  </RadioGroup>
-                </div>
-
-                <Separator />
-
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label className="text-base">Auto-collapse Sidebar</Label>
-                    <p className="text-sm text-muted-foreground">
-                      Minimize the sidebar automatically to save screen space.
-                    </p>
-                  </div>
-                  <Switch />
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
         </div>
       </Tabs>
 
       <div className="flex justify-end gap-3 pt-6 border-t mt-6">
         <Button variant="ghost">Cancel</Button>
-        <Button className="px-8 shadow-lg shadow-orange-500/20">
+        <Button
+          onClick={handleSave}
+          className="px-8 shadow-lg bg-blue-600 hover:bg-blue-700 text-white border-none"
+        >
           Save All Changes
         </Button>
       </div>
