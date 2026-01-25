@@ -169,6 +169,17 @@ const data = {
         },
       ],
     },
+    {
+      title: "UI Elements",
+      url: "/ui-components",
+      icon: FileText,
+      items: [
+        {
+          title: "Spinner Buttons",
+          url: "/ui-components",
+        },
+      ],
+    },
   ],
 };
 

@@ -41,6 +41,7 @@ const data = {
   user: {
     name: "Kishor Irnak",
     email: "kishorirnak@gmail.com",
+    avatar: "",
   },
   teams: [
     {
@@ -139,6 +140,8 @@ const data = {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "@/components/ui/sidebar";
+import { NavUser } from "@/components/nav-user";
+import { NavMain } from "@/components/nav-main";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
@@ -236,71 +239,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Platform</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {data.navMain.map((item) => {
-                const isMainActive = item.items
-                  ? item.items.some((sub) => isActive(sub.url))
-                  : isActive(item.url);
-
-                return (
-                  <SidebarMenuItem key={item.title}>
-                    {item.items ? (
-                      <>
-                        <SidebarMenuButton
-                          tooltip={item.title}
-                          onClick={() => toggleItem(item.title)}
-                          isActive={isMainActive}
-                        >
-                          {item.icon && <item.icon />}
-                          <span>{item.title}</span>
-                          <ChevronRight
-                            className={`ml-auto transition-transform duration-200 ${
-                              openItems[item.title] ? "rotate-90" : ""
-                            }`}
-                          />
-                        </SidebarMenuButton>
-
-                        {openItems[item.title] && (
-                          <SidebarMenuSub>
-                            {item.items.map((subItem) => (
-                              <SidebarMenuSubItem key={subItem.title}>
-                                <SidebarMenuSubButton
-                                  asChild
-                                  isActive={isActive(subItem.url)}
-                                >
-                                  <Link
-                                    href={subItem.url}
-                                    onClick={handleLinkClick}
-                                  >
-                                    <span>{subItem.title}</span>
-                                  </Link>
-                                </SidebarMenuSubButton>
-                              </SidebarMenuSubItem>
-                            ))}
-                          </SidebarMenuSub>
-                        )}
-                      </>
-                    ) : (
-                      <SidebarMenuButton
-                        tooltip={item.title}
-                        isActive={isActive(item.url)}
-                        asChild
-                      >
-                        <Link href={item.url} onClick={handleLinkClick}>
-                          {item.icon && <item.icon />}
-                          <span>{item.title}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    )}
-                  </SidebarMenuItem>
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        <NavMain
+          items={data.navMain.map((item) => ({
+            ...item,
+            isActive: item.items
+              ? item.items.some((sub) => isActive(sub.url))
+              : isActive(item.url),
+          }))}
+        />
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
@@ -328,21 +274,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-            >
-              <div className="h-8 w-8 rounded-lg bg-slate-200 flex items-center justify-center">
-                <span className="text-xs font-medium text-black">KI</span>
-              </div>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{data.user.name}</span>
-                <span className="truncate text-xs">{data.user.email}</span>
-              </div>
-              <ChevronsUpDown className="ml-auto size-4" />
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          <NavUser user={data.user} />
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>

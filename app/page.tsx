@@ -1,3 +1,4 @@
+import React, { Suspense } from "react";
 import { SectionCards } from "@/components/section-cards";
 import { ChartAreaInteractive } from "@/components/chart-area-interactive";
 import { DataTable } from "@/components/data-table";
@@ -16,7 +17,13 @@ export default function Home() {
           <div className="px-4 lg:px-6">
             <ChartAreaInteractive data={data.areaChartData} />
           </div>
-          <DataTable data={data.tableData} />
+          <Suspense
+            fallback={
+              <div className="h-[400px] w-full animate-pulse bg-muted rounded-lg" />
+            }
+          >
+            <DataTable data={data.tableData} />
+          </Suspense>
         </div>
       </div>
     </div>

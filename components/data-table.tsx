@@ -341,7 +341,7 @@ export function DataTable({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [pagination, setPagination] = React.useState({
@@ -352,12 +352,12 @@ export function DataTable({
   const sensors = useSensors(
     useSensor(MouseSensor, {}),
     useSensor(TouchSensor, {}),
-    useSensor(KeyboardSensor, {})
+    useSensor(KeyboardSensor, {}),
   );
 
   const dataIds = React.useMemo<UniqueIdentifier[]>(
     () => data?.map(({ id }) => id) || [],
-    [data]
+    [data],
   );
 
   const table = useReactTable({
@@ -385,6 +385,15 @@ export function DataTable({
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
+  const [isChangingTab, setIsChangingTab] = React.useState(false);
+
+  const handleTabChange = (value: string) => {
+    setIsChangingTab(true);
+    setTimeout(() => {
+      setIsChangingTab(false);
+    }, 500);
+  };
+
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (active && over && active.id !== over.id) {
@@ -400,6 +409,7 @@ export function DataTable({
     <Tabs
       defaultValue="outline"
       className="w-full flex-col justify-start gap-6"
+      onValueChange={handleTabChange}
     >
       <div className="flex items-center justify-between px-4 lg:px-6">
         <Label htmlFor="view-selector" className="sr-only">
@@ -446,7 +456,7 @@ export function DataTable({
                 .filter(
                   (column) =>
                     typeof column.accessorFn !== "undefined" &&
-                    column.getCanHide()
+                    column.getCanHide(),
                 )
                 .map((column) => {
                   return (
@@ -472,8 +482,18 @@ export function DataTable({
       </div>
       <TabsContent
         value="outline"
-        className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
+        className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6 min-h-[400px]"
       >
+        {isChangingTab ? (
+          <div className="absolute inset-0 z-50 flex items-center justify-center bg-background/50 backdrop-blur-[1px]">
+            <div className="flex flex-col items-center gap-2">
+              <IconLoader className="size-8 animate-spin text-primary" />
+              <p className="text-sm font-medium text-muted-foreground">
+                Please wait...
+              </p>
+            </div>
+          </div>
+        ) : null}
         <div className="overflow-hidden rounded-lg border">
           <DndContext
             collisionDetection={closestCenter}
@@ -493,7 +513,7 @@ export function DataTable({
                             ? null
                             : flexRender(
                                 header.column.columnDef.header,
-                                header.getContext()
+                                header.getContext(),
                               )}
                         </TableHead>
                       );

@@ -38,6 +38,7 @@ import {
   IconTruckDelivery,
   IconX,
 } from "@tabler/icons-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   flexRender,
   getCoreRowModel,
@@ -289,7 +290,7 @@ export function OrdersTable({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [pagination, setPagination] = React.useState({
@@ -300,12 +301,12 @@ export function OrdersTable({
   const sensors = useSensors(
     useSensor(MouseSensor, {}),
     useSensor(TouchSensor, {}),
-    useSensor(KeyboardSensor, {})
+    useSensor(KeyboardSensor, {}),
   );
 
   const dataIds = React.useMemo<UniqueIdentifier[]>(
     () => data?.map(({ id }) => id) || [],
-    [data]
+    [data],
   );
 
   const table = useReactTable({
@@ -344,44 +345,64 @@ export function OrdersTable({
     }
   }
 
-  const [activeTab, setActiveTab] = React.useState("all");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const [activeTab, setActiveTab] = React.useState(
+    searchParams.get("tab") || "all",
+  );
+  const [isChangingTab, setIsChangingTab] = React.useState(false);
 
   const handleTabChange = (value: string) => {
-    setActiveTab(value);
+    setIsChangingTab(true);
+
+    // Update URL search params
+    const params = new URLSearchParams(searchParams.toString());
     if (value === "all") {
-      setData(initialData);
-    } else if (value === "pending") {
-      setData(
-        initialData.filter(
-          (item) => item.status === "Pending" || item.status === "Run"
-        )
-      );
-    } else if (value === "shipped") {
-      setData(
-        initialData.filter(
-          (item) => item.status === "Shipped" || item.status === "Delivered"
-        )
-      );
-    } else if (value === "returns") {
-      setData(
-        initialData.filter(
-          (item) => item.status === "Refunded" || item.status === "Cancelled"
-        )
-      );
+      params.delete("tab");
+    } else {
+      params.set("tab", value);
     }
-    table.setPageIndex(0);
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+
+    setTimeout(() => {
+      setActiveTab(value);
+      if (value === "all") {
+        setData(initialData);
+      } else if (value === "pending") {
+        setData(
+          initialData.filter(
+            (item) => item.status === "Pending" || item.status === "Run",
+          ),
+        );
+      } else if (value === "shipped") {
+        setData(
+          initialData.filter(
+            (item) => item.status === "Shipped" || item.status === "Delivered",
+          ),
+        );
+      } else if (value === "returns") {
+        setData(
+          initialData.filter(
+            (item) => item.status === "Refunded" || item.status === "Cancelled",
+          ),
+        );
+      }
+      table.setPageIndex(0);
+      setIsChangingTab(false);
+    }, 500);
   };
 
   const pendingCount = initialData.filter(
-    (item) => item.status === "Pending" || item.status === "Run"
+    (item) => item.status === "Pending" || item.status === "Run",
   ).length;
   const shippedCount = initialData.filter(
-    (item) => item.status === "Shipped" || item.status === "Delivered"
+    (item) => item.status === "Shipped" || item.status === "Delivered",
   ).length;
 
   return (
     <Tabs
-      defaultValue="all"
+      value={activeTab}
       className="w-full flex-col justify-start gap-6"
       onValueChange={handleTabChange}
     >
@@ -412,7 +433,7 @@ export function OrdersTable({
                 .filter(
                   (column) =>
                     typeof column.accessorFn !== "undefined" &&
-                    column.getCanHide()
+                    column.getCanHide(),
                 )
                 .map((column) => {
                   return (
@@ -436,7 +457,17 @@ export function OrdersTable({
           </Button>
         </div>
       </div>
-      <div className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">
+      <div className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6 min-h-[400px]">
+        {isChangingTab ? (
+          <div className="absolute inset-0 z-50 flex items-center justify-center bg-background/50 backdrop-blur-[1px]">
+            <div className="flex flex-col items-center gap-2">
+              <IconLoader className="size-8 animate-spin text-primary" />
+              <p className="text-sm font-medium text-muted-foreground">
+                Please wait...
+              </p>
+            </div>
+          </div>
+        ) : null}
         <div className="overflow-hidden rounded-lg border">
           <DndContext
             collisionDetection={closestCenter}
@@ -456,7 +487,7 @@ export function OrdersTable({
                             ? null
                             : flexRender(
                                 header.column.columnDef.header,
-                                header.getContext()
+                                header.getContext(),
                               )}
                         </TableHead>
                       );

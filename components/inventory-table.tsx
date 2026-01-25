@@ -15,6 +15,7 @@ import {
   type SortingState,
   type VisibilityState,
 } from "@tanstack/react-table";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { z } from "zod";
 
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -55,6 +56,7 @@ import {
   IconChevronsRight,
   IconLayoutColumns,
   IconPlus,
+  IconLoader,
 } from "@tabler/icons-react";
 
 export const inventorySchema = z.object({
@@ -227,18 +229,38 @@ export function InventoryTable({
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
-  const [activeTab, setActiveTab] = React.useState("all");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const [activeTab, setActiveTab] = React.useState(
+    searchParams.get("tab") || "all",
+  );
+  const [isChangingTab, setIsChangingTab] = React.useState(false);
 
   const handleTabChange = (value: string) => {
-    setActiveTab(value);
+    setIsChangingTab(true);
+
+    // Update URL search params
+    const params = new URLSearchParams(searchParams.toString());
     if (value === "all") {
-      setData(initialData);
-    } else if (value === "available") {
-      setData(initialData.filter((item) => item.available > 0));
-    } else if (value === "unavailable") {
-      setData(initialData.filter((item) => item.available === 0));
+      params.delete("tab");
+    } else {
+      params.set("tab", value);
     }
-    table.setPageIndex(0);
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+
+    setTimeout(() => {
+      setActiveTab(value);
+      if (value === "all") {
+        setData(initialData);
+      } else if (value === "available") {
+        setData(initialData.filter((item) => item.available > 0));
+      } else if (value === "unavailable") {
+        setData(initialData.filter((item) => item.available === 0));
+      }
+      table.setPageIndex(0);
+      setIsChangingTab(false);
+    }, 500);
   };
 
   const availableCount = initialData.filter(
@@ -250,7 +272,7 @@ export function InventoryTable({
 
   return (
     <Tabs
-      defaultValue="all"
+      value={activeTab}
       className="w-full flex-col justify-start gap-6"
       onValueChange={handleTabChange}
     >
@@ -326,7 +348,17 @@ export function InventoryTable({
           {/* Filter icon removed as per request */}
         </div>
       </div>
-      <div className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">
+      <div className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6 min-h-[400px]">
+        {isChangingTab ? (
+          <div className="absolute inset-0 z-50 flex items-center justify-center bg-background/50 backdrop-blur-[1px]">
+            <div className="flex flex-col items-center gap-2">
+              <IconLoader className="size-8 animate-spin text-primary" />
+              <p className="text-sm font-medium text-muted-foreground">
+                Please wait...
+              </p>
+            </div>
+          </div>
+        ) : null}
         <div className="overflow-hidden rounded-lg border">
           <Table>
             <TableHeader className="bg-muted sticky top-0 z-10">
