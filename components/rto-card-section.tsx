@@ -2,6 +2,7 @@ import { RtoBarChart } from "./rto-reasons-bar-chart";
 import { DeliveryAttemptsChart } from "./delivery-attempts-chart";
 import { ShipmentRegionChart } from "./shipment-region-chart";
 import { ShipmentByStatus } from "./shipment-status";
+import { StateHeatmap } from "./state-heatmap";
 
 export function RtoCardSection({ rtoReasons }: { rtoReasons: any[] }) {
   return (
@@ -11,6 +12,7 @@ export function RtoCardSection({ rtoReasons }: { rtoReasons: any[] }) {
       <DeliveryAttemptsChart />
       <ShipmentByStatus />
       <ShipmentRegionChart className="@xl/main:col-span-2" />
+      <StateHeatmap className="@xl/main:col-span-2" />
     </div>
   );
 }

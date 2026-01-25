@@ -22,10 +22,10 @@ import {
 export const description = "A pie chart with a label";
 
 const chartData = [
-  { attempt: "1st Attempt", count: 450, fill: "var(--color-attempt1)" },
+  { attempt: "1st Attempt", count: 50, fill: "var(--color-attempt1)" },
   { attempt: "2nd Attempt", count: 180, fill: "var(--color-attempt2)" },
-  { attempt: "3rd Attempt", count: 90, fill: "var(--color-attempt3)" },
-  { attempt: "4th+ Attempt", count: 45, fill: "var(--color-attempt4)" },
+  { attempt: "3rd Attempt", count: 200, fill: "var(--color-attempt3)" },
+  { attempt: "4th+ Attempt", count: 450, fill: "var(--color-attempt4)" },
 ];
 
 const chartConfig = {
@@ -60,9 +60,9 @@ export function ShipmentByStatus({ className }: { className?: string }) {
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="[&_.recharts-pie-label-text]:fill-foreground mx-auto aspect-square max-h-[250px] pb-0"
+          className="[&_.recharts-pie-label-text]:fill-foreground mx-auto aspect-square max-h-[250px]  pb-0"
         >
-          <PieChart>
+          <PieChart className="pt-2">
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
             <Pie data={chartData} dataKey="count" label nameKey="attempt" />
           </PieChart>
