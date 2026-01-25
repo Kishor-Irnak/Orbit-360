@@ -4,8 +4,8 @@ const isProd = process.env.NODE_ENV === "production";
 
 const nextConfig: NextConfig = {
   output: "export",
-  basePath: isProd ? "/Orbit-360" : "",
-  assetPrefix: isProd ? "/Orbit-360/" : "",
+  basePath: "/Orbit-360",
+  assetPrefix: "/Orbit-360/",
   images: {
     unoptimized: true,
   },
