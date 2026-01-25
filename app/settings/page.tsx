@@ -2,22 +2,18 @@
 
 import {
   User,
-  Bell,
   Monitor,
-  Briefcase,
   Layers,
   Shield,
-  CreditCard,
-  Mail,
-  Smartphone,
-  Globe,
   Clock,
+  Globe,
   Layout,
-  Target,
   Webhook,
   Key,
+  Palette,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -38,8 +34,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Slider } from "@/components/ui/slider";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
 
 export default function SettingsPage() {
@@ -48,7 +42,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="flex flex-1 flex-col gap-6 p-4 lg:p-8 pt-0 max-w-6xl mx-auto w-full">
+    <div className="flex flex-1 flex-col gap-6 p-4 lg:p-8 pt-0 max-w-6xl mx-auto w-full relative">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
         <p className="text-muted-foreground">
@@ -57,7 +51,7 @@ export default function SettingsPage() {
       </div>
 
       <Tabs defaultValue="profile" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-5 h-auto p-1 bg-muted/50 rounded-xl">
+        <TabsList className="grid w-full grid-cols-3 h-auto p-1 bg-muted/50 rounded-xl max-w-[400px]">
           <TabsTrigger
             value="profile"
             className="py-2.5 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm"
@@ -66,28 +60,14 @@ export default function SettingsPage() {
             Profile
           </TabsTrigger>
           <TabsTrigger
-            value="notifications"
-            className="py-2.5 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm"
-          >
-            <Bell className="mr-2 h-4 w-4" />
-            Notifs
-          </TabsTrigger>
-          <TabsTrigger
-            value="dashboard"
+            value="display"
             className="py-2.5 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm"
           >
             <Monitor className="mr-2 h-4 w-4" />
             Display
           </TabsTrigger>
           <TabsTrigger
-            value="business"
-            className="py-2.5 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm"
-          >
-            <Briefcase className="mr-2 h-4 w-4" />
-            Business
-          </TabsTrigger>
-          <TabsTrigger
-            value="integrations"
+            value="apps"
             className="py-2.5 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm"
           >
             <Layers className="mr-2 h-4 w-4" />
@@ -124,11 +104,15 @@ export default function SettingsPage() {
                       <div className="flex gap-2 pt-2 justify-center md:justify-start">
                         <Button
                           size="sm"
-                          className="bg-blue-600 hover:bg-blue-700 text-white border-none"
+                          className="bg-blue-600 hover:bg-blue-700 text-white border-none rounded-lg px-4"
                         >
                           Change Photo
                         </Button>
-                        <Button variant="ghost" size="sm">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="rounded-lg"
+                        >
                           Remove
                         </Button>
                       </div>
@@ -140,29 +124,19 @@ export default function SettingsPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="fullname">Full Name</Label>
-                      <Input id="fullname" defaultValue="Kishor Irnak" />
+                      <Input
+                        id="fullname"
+                        defaultValue="Kishor Irnak"
+                        className="rounded-xl h-11 border-slate-200"
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email">Email Address</Label>
-                      <Input id="email" defaultValue="kishorirnak@gmail.com" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="role">Workspace Role</Label>
-                      <Select defaultValue="admin">
-                        <SelectTrigger id="role">
-                          <SelectValue placeholder="Select role" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="admin">Administrator</SelectItem>
-                          <SelectItem value="manager">Manager</SelectItem>
-                          <SelectItem value="editor">Editor</SelectItem>
-                          <SelectItem value="viewer">Viewer</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <p className="text-[10px] text-muted-foreground flex items-center">
-                        <Shield className="mr-1 h-3 w-3 text-blue-500" />
-                        Admin has full access to all modules and configurations.
-                      </p>
+                      <Input
+                        id="email"
+                        defaultValue="kishorirnak@gmail.com"
+                        className="rounded-xl h-11 border-slate-200"
+                      />
                     </div>
                   </div>
                 </CardContent>
@@ -170,125 +144,38 @@ export default function SettingsPage() {
 
               <Card className="border-none shadow-md bg-card/50 backdrop-blur-sm">
                 <CardHeader>
-                  <CardTitle>Security & Privacy</CardTitle>
+                  <CardTitle>Security</CardTitle>
                   <CardDescription>
-                    Manage your password and authentication methods.
+                    Manage your password and security.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between p-4 bg-background/50 rounded-2xl">
                     <div className="space-y-0.5">
-                      <Label className="text-base">
+                      <Label className="text-base font-semibold">
                         Two-Factor Authentication
                       </Label>
                       <p className="text-sm text-muted-foreground">
                         Add an extra layer of security to your account.
                       </p>
                     </div>
-                    <Switch />
+                    <Switch className="data-[state=checked]:bg-blue-600" />
                   </div>
-                  <Separator />
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label className="text-base">Login Notifications</Label>
-                      <p className="text-sm text-muted-foreground">
-                        Receive an email every time someone logs into your
-                        account.
-                      </p>
-                    </div>
-                    <Switch defaultChecked />
-                  </div>
-                  <div className="pt-4">
-                    <Button variant="outline">Change Password</Button>
+                  <div className="pt-2 flex flex-col gap-4">
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start h-12 rounded-xl text-slate-600 hover:bg-slate-100 transition-colors"
+                    >
+                      <Shield className="mr-2 h-4 w-4" /> Change Password
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
             </div>
           </TabsContent>
 
-          {/* NOTIFICATION PREFERENCES */}
-          <TabsContent value="notifications" className="space-y-6">
-            <Card className="border-none shadow-md bg-card/50 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle>Logistics & Sales Alerts</CardTitle>
-                <CardDescription>
-                  Configure automated alerts for your operational metrics.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-8">
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <Label className="text-sm font-medium">
-                      Low Inventory Threshold
-                    </Label>
-                    <span className="text-sm font-bold text-blue-600 dark:text-blue-400">
-                      10 items
-                    </span>
-                  </div>
-                  <Slider defaultValue={[10]} max={100} step={5} />
-                  <p className="text-xs text-muted-foreground">
-                    Alert me when any product stock goes below this number.
-                  </p>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <Label className="text-sm font-medium">
-                      Critical ROAS Alert
-                    </Label>
-                    <span className="text-sm font-bold text-blue-600 dark:text-blue-400">
-                      2.5x
-                    </span>
-                  </div>
-                  <Slider defaultValue={[2.5]} max={10} step={0.1} />
-                  <p className="text-xs text-muted-foreground">
-                    Alert me if Marketing ROAS falls below this target.
-                  </p>
-                </div>
-
-                <Separator />
-
-                <div className="space-y-4">
-                  <h4 className="text-sm font-semibold">Delivery Channels</h4>
-                  <div className="grid gap-4">
-                    <div className="flex items-center justify-between space-x-2">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/20 text-blue-600">
-                          <Mail className="h-4 w-4" />
-                        </div>
-                        <Label>Email Notifications</Label>
-                      </div>
-                      <Switch defaultChecked />
-                    </div>
-                    <div className="flex items-center justify-between space-x-2">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/20 text-blue-600">
-                          <Smartphone className="h-4 w-4" />
-                        </div>
-                        <Label>Push App Notifications</Label>
-                      </div>
-                      <Switch defaultChecked />
-                    </div>
-                  </div>
-                </div>
-
-                <Separator />
-
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label className="text-base">Weekly Summaries</Label>
-                    <p className="text-sm text-muted-foreground">
-                      Get a performance digest delivered every Monday morning.
-                    </p>
-                  </div>
-                  <Switch defaultChecked />
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
           {/* GLOBAL DASHBOARD SETTINGS */}
-          <TabsContent value="dashboard" className="space-y-6">
+          <TabsContent value="display" className="space-y-6">
             <Card className="border-none shadow-md bg-card/50 backdrop-blur-sm">
               <CardHeader>
                 <CardTitle>Localization & View</CardTitle>
@@ -299,15 +186,14 @@ export default function SettingsPage() {
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label className="flex items-center gap-2">
-                      <Clock className="h-4 w-4 text-muted-foreground" />{" "}
-                      Timezone
+                    <Label className="flex items-center gap-2 font-medium">
+                      <Clock className="h-4 w-4 text-slate-400" /> Timezone
                     </Label>
                     <Select defaultValue="ist">
-                      <SelectTrigger>
+                      <SelectTrigger className="h-11 rounded-xl border-slate-200">
                         <SelectValue placeholder="Select timezone" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="rounded-xl shadow-2xl">
                         <SelectItem value="ist">
                           India (IST) GMT+5:30
                         </SelectItem>
@@ -321,155 +207,20 @@ export default function SettingsPage() {
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label className="flex items-center gap-2">
-                      <Globe className="h-4 w-4 text-muted-foreground" />{" "}
-                      Default Currency
+                    <Label className="flex items-center gap-2 font-medium">
+                      <Globe className="h-4 w-4 text-slate-400" /> Default
+                      Currency
                     </Label>
                     <Select defaultValue="inr">
-                      <SelectTrigger>
+                      <SelectTrigger className="h-11 rounded-xl border-slate-200">
                         <SelectValue placeholder="Select currency" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="rounded-xl shadow-2xl">
                         <SelectItem value="inr">INR (₹) Rupee</SelectItem>
                         <SelectItem value="usd">USD ($) Dollar</SelectItem>
                         <SelectItem value="eur">EUR (€) Euro</SelectItem>
                       </SelectContent>
                     </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Date Display Format</Label>
-                    <RadioGroup
-                      defaultValue="dd-mm-yyyy"
-                      className="flex flex-col gap-2 mt-2"
-                    >
-                      <div className="flex items-center space-x-2 p-2 rounded-lg border bg-background/50">
-                        <RadioGroupItem value="dd-mm-yyyy" id="d1" />
-                        <Label
-                          htmlFor="d1"
-                          className="flex-1 cursor-pointer font-normal"
-                        >
-                          DD / MM / YYYY (e.g., 25/01/2026)
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-2 p-2 rounded-lg border bg-background/50">
-                        <RadioGroupItem value="mm-dd-yyyy" id="d2" />
-                        <Label
-                          htmlFor="d2"
-                          className="flex-1 cursor-pointer font-normal"
-                        >
-                          MM / DD / YYYY (e.g., 01/25/2026)
-                        </Label>
-                      </div>
-                    </RadioGroup>
-                  </div>
-                  <div className="space-y-2">
-                    <Label className="flex items-center gap-2">
-                      <Layout className="h-4 w-4 text-muted-foreground" />{" "}
-                      Landing Page
-                    </Label>
-                    <Select defaultValue="dashboard">
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select home page" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="dashboard">
-                          Main Dashboard
-                        </SelectItem>
-                        <SelectItem value="orders">Orders List</SelectItem>
-                        <SelectItem value="tracking">
-                          Logistics Tracking
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <p className="text-xs text-muted-foreground pt-1">
-                      The first page you see after logging in.
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* BUSINESS & LOGISTICS LOGIC */}
-          <TabsContent value="business" className="space-y-6">
-            <Card className="border-none shadow-md bg-card/50 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle>Analytic Rules</CardTitle>
-                <CardDescription>
-                  Define the logic behind your marketing and logistics metrics.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-4">
-                  <Label>Marketing Attribution Model</Label>
-                  <RadioGroup
-                    defaultValue="last-click"
-                    className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2"
-                  >
-                    <div className="flex flex-col items-start gap-2 p-4 rounded-xl border bg-background/50 hover:bg-background/80 transition-colors">
-                      <RadioGroupItem value="last-click" id="attrib-last" />
-                      <Label htmlFor="attrib-last" className="font-semibold">
-                        Last Click
-                      </Label>
-                      <p className="text-[10px] text-muted-foreground">
-                        Credit goes to the final touchpoint before purchase.
-                      </p>
-                    </div>
-                    <div className="flex flex-col items-start gap-2 p-4 rounded-xl border bg-background/50 hover:bg-background/80 transition-colors">
-                      <RadioGroupItem value="first-click" id="attrib-first" />
-                      <Label htmlFor="attrib-first" className="font-semibold">
-                        First Click
-                      </Label>
-                      <p className="text-[10px] text-muted-foreground">
-                        Credit goes to the very first interaction.
-                      </p>
-                    </div>
-                    <div className="flex flex-col items-start gap-2 p-4 rounded-xl border bg-background/50 hover:bg-background/80 transition-colors">
-                      <RadioGroupItem value="linear" id="attrib-linear" />
-                      <Label htmlFor="attrib-linear" className="font-semibold">
-                        Linear
-                      </Label>
-                      <p className="text-[10px] text-muted-foreground">
-                        Credit is split equally across all touchpoints.
-                      </p>
-                    </div>
-                  </RadioGroup>
-                </div>
-
-                <Separator />
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <Label className="flex items-center gap-2 font-semibold">
-                      <Target className="h-4 w-4 text-blue-600 dark:text-blue-400" />{" "}
-                      Revenue Targets
-                    </Label>
-                    <div className="space-y-2">
-                      <Label htmlFor="rev-target" className="text-xs">
-                        Monthly Revenue Goal (₹)
-                      </Label>
-                      <Input
-                        id="rev-target"
-                        type="number"
-                        defaultValue="5000000"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    <Label className="flex items-center gap-2 font-semibold">
-                      <Clock className="h-4 w-4 text-blue-600 dark:text-blue-400" />{" "}
-                      Logistics Windows
-                    </Label>
-                    <div className="space-y-2">
-                      <Label htmlFor="return-window" className="text-xs">
-                        Standard Return Window (Days)
-                      </Label>
-                      <Input
-                        id="return-window"
-                        type="number"
-                        defaultValue="30"
-                      />
-                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -477,7 +228,7 @@ export default function SettingsPage() {
           </TabsContent>
 
           {/* INTEGRATIONS */}
-          <TabsContent value="integrations" className="space-y-6">
+          <TabsContent value="apps" className="space-y-6">
             <Card className="border-none shadow-md bg-card/50 backdrop-blur-sm">
               <CardHeader>
                 <CardTitle>External Data Sources</CardTitle>
@@ -499,7 +250,7 @@ export default function SettingsPage() {
                         </p>
                       </div>
                     </div>
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" className="rounded-lg">
                       Configure
                     </Button>
                   </div>
@@ -515,12 +266,15 @@ export default function SettingsPage() {
                         </p>
                       </div>
                     </div>
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" className="rounded-lg">
                       Manage
                     </Button>
                   </div>
                 </div>
-                <Button className="w-full mt-2" variant="ghost">
+                <Button
+                  className="w-full mt-2 h-11 rounded-xl border-dashed"
+                  variant="outline"
+                >
                   Add New Integration +
                 </Button>
               </CardContent>
@@ -530,10 +284,12 @@ export default function SettingsPage() {
       </Tabs>
 
       <div className="flex justify-end gap-3 pt-6 border-t mt-6">
-        <Button variant="ghost">Cancel</Button>
+        <Button variant="ghost" className="rounded-xl px-6">
+          Cancel
+        </Button>
         <Button
           onClick={handleSave}
-          className="px-8 shadow-lg bg-blue-600 hover:bg-blue-700 text-white border-none"
+          className="px-8 h-11 rounded-xl shadow-lg bg-blue-600 hover:bg-blue-700 text-white border-none font-bold"
         >
           Save All Changes
         </Button>
