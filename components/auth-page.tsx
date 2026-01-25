@@ -58,11 +58,23 @@ export function AuthPage() {
   };
 
   return (
-    <div className="flex h-screen w-full font-sans overflow-hidden bg-white">
+    <div className="flex h-screen w-full font-sans overflow-hidden bg-white light">
       <style jsx global>{`
         body {
           overflow: hidden;
           height: 100vh;
+          background: white !important;
+        }
+        .form-side label,
+        .form-side h1,
+        .form-side span {
+          color: #0f172a !important; /* slate-900 */
+        }
+        .form-side .text-slate-400 {
+          color: #94a3b8 !important;
+        }
+        .form-side .text-slate-500 {
+          color: #64748b !important;
         }
         ::-webkit-scrollbar {
           display: none;
@@ -73,7 +85,7 @@ export function AuthPage() {
         }
       `}</style>
       {/* Left Column: Form Section */}
-      <div className="flex w-full flex-col p-6 lg:w-1/2 xl:p-10 justify-center">
+      <div className="flex w-full flex-col p-6 lg:w-1/2 xl:p-10 justify-center bg-white form-side">
         <div className="flex items-center gap-2 mb-8 select-none">
           <Image
             src="/orbit360-logoBlack.png"
@@ -98,7 +110,7 @@ export function AuthPage() {
             <Button
               variant="outline"
               type="button"
-              className="w-full h-10 border-slate-200 hover:bg-slate-50 font-semibold"
+              className="w-full h-10 border-slate-200 hover:bg-slate-50 font-semibold text-slate-900"
               onClick={() => handleAuth()}
             >
               <GoogleIcon />
@@ -115,15 +127,17 @@ export function AuthPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="role">Role</Label>
+              <Label htmlFor="role" className="text-slate-900">
+                Role
+              </Label>
               <Select defaultValue="user">
                 <SelectTrigger
                   id="role"
-                  className="h-10 border-slate-200 focus:border-blue-500 focus:ring-blue-500/20"
+                  className="h-10 border-slate-200 focus:border-blue-500 focus:ring-blue-500/20 text-slate-900"
                 >
                   <SelectValue placeholder="Select role" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white text-slate-900 border-slate-200">
                   <SelectItem value="user">User</SelectItem>
                   <SelectItem value="admin">Admin</SelectItem>
                 </SelectContent>
@@ -131,23 +145,27 @@ export function AuthPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-slate-900">
+                Email
+              </Label>
               <Input
                 id="email"
                 type="email"
                 placeholder="luke@exaltstudio.co"
-                className="h-10 border-slate-200 focus:border-blue-500 focus:ring-blue-500/20"
+                className="h-10 border-slate-200 focus:border-blue-500 focus:ring-blue-500/20 text-slate-900 placeholder:text-slate-400"
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-slate-900">
+                Password
+              </Label>
               <div className="relative">
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  className="h-10 border-slate-200 pr-10 focus:border-blue-500 focus:ring-blue-500/20"
+                  className="h-10 border-slate-200 pr-10 focus:border-blue-500 focus:ring-blue-500/20 text-slate-900"
                   required
                 />
                 <button
@@ -181,7 +199,7 @@ export function AuthPage() {
         {/* Footer Branding */}
         <div className="mt-auto flex items-center justify-center gap-2 text-slate-400 select-none">
           <Command size={14} className="text-slate-300" />
-          <span className="text-xs font-medium tracking-tight">
+          <span className="text-xs font-medium tracking-tight text-slate-400">
             Powered by{" "}
             <a
               href="https://www.evoclabs.com/"
@@ -224,15 +242,22 @@ export function AuthPage() {
               <Quote className="text-blue-400" size={24} fill="currentColor" />
             </div>
 
-            <h2 className="text-3xl font-medium text-white leading-tight">
+            <h2
+              className="text-3xl font-medium leading-tight"
+              style={{ color: "white" }}
+            >
               "Orbit 360 has redefined how we manage our core operations. The
               seamless integration of logistics and marketing allows us to focus
               on what truly matters—our growth and our customers."
             </h2>
 
             <div className="space-y-1">
-              <div className="text-lg font-bold text-white">Kishor Irnak</div>
-              <div className="text-blue-400/80">Chief Operating Officer</div>
+              <div className="text-lg font-bold" style={{ color: "white" }}>
+                Kishor Irnak
+              </div>
+              <div className="text-blue-400/80" style={{ color: "#60a5fa" }}>
+                Chief Operating Officer
+              </div>
             </div>
           </div>
 
